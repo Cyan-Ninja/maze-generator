@@ -18,6 +18,20 @@ function generatePuzzle() {
 	var atBottom = false;
 	while (!atBottom) {
 		var directions = [];
+		if (currentY != 0) {
+			directions.push("N");
+		}
+		if (currentX != 0) {
+			directions.push("E");
+		}
+		if (currentX != puzzleWidth - 1) {
+			directions.push("W");
+		}
+		directions.push("S");
+		var direction = directions[Math.floor(Math.random() * directions.length)];
+		console.log("Dir: " + direction + "  Dirs: " + directions);
+
+		// CODE HERE
 
 		atBottom = true; // TEMP: Just For Development
 	}
