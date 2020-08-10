@@ -1,2 +1,3 @@
-# maze-generator
- Minimalistic maze generator.
+# Maze Generator
+
+A minimalist maze generation algorithm.
