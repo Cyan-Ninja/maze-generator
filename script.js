@@ -1,7 +1,6 @@
 var puzzleWidth = 20;
 var puzzleHeight = 20;
 function generatePuzzle() {
-	document.getElementById("working").style.display = "block";
 	let puzzleWidthValue = document.getElementById("puzzleWidth").value, puzzleHeightValue = document.getElementById("puzzleHeight").value;
 	if (puzzleWidthValue != "") {
 		puzzleWidth = parseInt(puzzleWidthValue);
