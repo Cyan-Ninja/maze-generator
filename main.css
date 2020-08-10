@@ -1,0 +1,79 @@
+/* Main (And Only) Stylesheet */
+
+* {
+	margin: 0.5vh;
+	padding: 0;
+	box-sizing: border-box;
+	background-color: #eee;
+	color: #111;
+	font-size: 1em;
+	font-family: Arial, sans-serif;
+	text-align: center;
+}
+
+#title {
+	font-size: 1.5em;
+	text-align: center;
+}
+
+#options {
+	width: 100vw;
+	margin: -1vw;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: stretch;
+}
+
+#options div {
+	margin: 1vw;
+}
+
+#options div button {
+	margin: 0.5vw;
+}
+
+h1 {
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+h2 {
+	margin: 0;
+	font-weight: normal;
+	text-decoration: underline;
+}
+
+input {
+	flex: 1;
+	border: solid 0.25vw #ccc;
+	background-color: #ddd;
+}
+
+button {
+	flex: 1;
+	border: solid 0.25vw #ccc;
+	background-color: #ddd;
+}
+
+canvas {
+	background-color: #fff;
+	align-self: center;
+	width: 75vw;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline overline;
+}
+
+a:focus {
+	text-decoration: underline overline;
+}
+
+a:active {
+	text-decoration: underline overline;
+}

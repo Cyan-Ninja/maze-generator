@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html" charset="utf-8">
+		<title>Maze Generator</title>
+		<meta name=viewport content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="main.css">
+	</head>
+	<body>
+		<h1 id="title">Maze Generator</h1>
+		<div id="options">
+			<input type="text" id="puzzleWidth" placeholder="Width [Default: 20]">
+			<input type="text" id="puzzleHeight" placeholder="Height [Default: 20]">
+			<input type="text" id="puzzleFont" placeholder="Font [Default: Arial]">
+			<button type="button" id="generatePuzzle" onclick="generatePuzzle();">Generate Maze</button>
+		</div>
+		<canvas id="canvas">Your browser doesn't support the canvas tag, please update to a newer browser.</canvas><br>
+		<a href="" download="Puzzle.png" class="download" id="imageDownload">[Download Image]</a>
+		<a href="" download="AnsweredPuzzle.png" class="download" id="answeredImageDownload">[Download Answered Image]</a><br>
+		<pre id="textDisplay"></pre>
+<script src="script.js" charset="utf-8" type="text/javascript"></script>
+	</body>
+</html>
