@@ -8,14 +8,14 @@ function generatePuzzle() {
 	}
 	for (var x = 0; x < puzzleMatrix.length; x++) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
-			puzzleMatrix[x][y] = {x: Math.random() < 0.5, y: Math.random() < 0.5};
+			puzzleMatrix[x][y] = {x: Math.random() < 0.5, y: Math.random() < 0.5, m: false};
 		}
 	}
 	console.log(puzzleMatrix);
-	var startingX = Math.floor(Math.random() * puzzleWidth);
-	var endingX;
+	var startingX = Math.floor(Math.random() * puzzleWidth), endingX;
 	console.log("StartingX: " + startingX);
 	var currentX = startingX, currentY = 0;
+	puzzleMatrix[currentX][currentY].m = true;
 	var atBottom = false;
 	while (!atBottom) {
 		// Get Directions
@@ -25,10 +25,14 @@ function generatePuzzle() {
 		}
 		if (currentX != 0) {
 			directions.push("E");
+			directions.push("E");
 		}
 		if (currentX != puzzleWidth - 1) {
 			directions.push("W");
+			directions.push("W");
 		}
+		directions.push("S");
+		directions.push("S");
 		directions.push("S");
 		// Get Direction
 		var direction = directions[Math.floor(Math.random() * directions.length)];
@@ -38,51 +42,56 @@ function generatePuzzle() {
 			case "N":
 				puzzleMatrix[currentX][currentY].x = false;
 				currentY -= 1;
+				puzzleMatrix[currentX][currentY].m = true;
 				break;
 			case "E":
 				puzzleMatrix[currentX][currentY].y = false;
 				currentX -= 1;
+				puzzleMatrix[currentX][currentY].m = true;
 				break;
 			case "W":
 				puzzleMatrix[currentX + 1][currentY].y = false;
 				currentX += 1;
+				puzzleMatrix[currentX][currentY].m = true;
 				break;
 			case "S":
 				if (currentY == puzzleHeight - 1) {
 					atBottom = true;
+					endingX = currentX;
 					break;
 				} else {
 					puzzleMatrix[currentX][currentY + 1].x = false;
 					currentY += 1;
+					puzzleMatrix[currentX][currentY].m = true;
 					break;
 				}
 			default:
 				direction = "S";
 				if (currentY == puzzleHeight - 1) {
 					atBottom = true;
+					endingX = currentX;
 					break;
 				} else {
 					puzzleMatrix[currentX][currentY + 1].x = false;
 					currentY += 1;
+					puzzleMatrix[currentX][currentY].m = true;
 					break;
 				}
 		}
-		//
 
-		canvasDisplay(puzzleMatrix);
-
-		//atBottom = true; // TEMP: Just For Development
+		canvasDisplay(puzzleMatrix, startingX, endingX);
 	}
 }
 
-function canvasDisplay(puzzleMatrix) {
+function canvasDisplay(puzzleMatrix, startingX, endingX) {
 	var c = document.getElementById("canvas");
 	var ctx = c.getContext("2d");
 	c.width = puzzleWidth * 50;
 	c.height = puzzleHeight * 50;
-	ctx.clearRect(0, 0, c.width, c.height);
-	ctx.strokeStyle = "#000";
 	ctx.lineWidth = 2.5;
+	ctx.strokeStyle = "#000";
+	ctx.fillStyle = "rgb(255, 127, 126)";
+	ctx.clearRect(0, 0, c.width, c.height);
 	for (var x = 0; x < puzzleMatrix.length; x++) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
 			if (puzzleMatrix[x][y].x == true) {
@@ -99,8 +108,18 @@ function canvasDisplay(puzzleMatrix) {
 				ctx.stroke();
 				ctx.closePath();
 			}
+			if (puzzleMatrix[x][y].m == true) {
+				ctx.beginPath();
+				ctx.fillRect(x * 50 + 12.5, y * 50 + 12.5, 25, 25);
+				ctx.stroke();
+				ctx.closePath();
+			}
 		}
 	}
+	ctx.rect(1.25, 1.25, c.width - 2.5, c.height - 2.5);
+	ctx.stroke();
+	ctx.clearRect(startingX * 50 + 1.25, 0, 50 - 2.5, 3.75);
+	ctx.clearRect(endingX * 50 + 1.25, c.height - 3.75, 50 - 2.5, 3.75);
 }
 
 generatePuzzle(); // TEMP: Just For Development
