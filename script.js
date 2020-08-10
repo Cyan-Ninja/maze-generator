@@ -12,6 +12,15 @@ function generatePuzzle() {
 		}
 	}
 	console.log(puzzleMatrix);
+	var startingX = Math.floor(Math.random() * puzzleWidth);
+	console.log(startingX);
+	var currentX = startingX, currentY = 0;
+	var atBottom = false;
+	while (!atBottom) {
+		var directions = [];
+
+		atBottom = true; // TEMP: Just For Development
+	}
 }
 
 generatePuzzle(); // TEMP: Just For Development
