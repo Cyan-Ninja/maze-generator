@@ -13,6 +13,7 @@ function generatePuzzle() {
 	}
 	console.log(puzzleMatrix);
 	var startingX = Math.floor(Math.random() * puzzleWidth);
+	var endingX;
 	console.log("StartingX: " + startingX);
 	var currentX = startingX, currentY = 0;
 	var atBottom = false;
@@ -80,6 +81,8 @@ function canvasDisplay(puzzleMatrix) {
 	c.width = puzzleWidth * 50;
 	c.height = puzzleHeight * 50;
 	ctx.clearRect(0, 0, c.width, c.height);
+	ctx.strokeStyle = "#000";
+	ctx.lineWidth = 2.5;
 	for (var x = 0; x < puzzleMatrix.length; x++) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
 			if (puzzleMatrix[x][y].x == true) {
