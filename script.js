@@ -1,6 +1,7 @@
 var puzzleWidth = 20;
 var puzzleHeight = 20;
 function generatePuzzle() {
+	document.getElementById("working").style.display = "block";
 	let puzzleWidthValue = document.getElementById("puzzleWidth").value, puzzleHeightValue = document.getElementById("puzzleHeight").value;
 	if (puzzleWidthValue != "") {
 		puzzleWidth = parseInt(puzzleWidthValue);
@@ -116,8 +117,9 @@ function generatePuzzle() {
 				}
 		}
 
-		canvasDisplay(puzzleMatrix, startingX, endingX);
 	}
+	canvasDisplay(puzzleMatrix, startingX, endingX);
+	document.getElementById("working").style.display = "none";
 }
 
 function canvasDisplay(puzzleMatrix, startingX, endingX) {
@@ -126,8 +128,11 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 	c.width = puzzleWidth * 50;
 	c.height = puzzleHeight * 50;
 	ctx.lineWidth = 2.5;
-	ctx.strokeStyle = "#000";
-	ctx.fillStyle = "rgb(255, 127, 126)";
+	ctx.strokeStyle = "#000"; // Black Stroke Colour
+	//ctx.fillStyle = "#000"; // Black Fill Colour
+	ctx.fillStyle = "#044"; // My-Cyan Fill Colour
+	//ctx.fillStyle = "blue"; // Blue Fill Colour
+	//ctx.fillStyle = "rgb(255, 127, 126)"; // Pink Fill Colour
 	ctx.clearRect(0, 0, c.width, c.height);
 	for (var x = 0; x < puzzleMatrix.length; x++) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
@@ -145,6 +150,18 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 				ctx.stroke();
 				ctx.closePath();
 			}
+		}
+	}
+	ctx.rect(1.25, 1.25, c.width - 2.5, c.height - 2.5);
+	ctx.stroke();
+	ctx.clearRect(startingX * 50 + 1.25, 0, 50 - 2.5, 3.75);
+	ctx.clearRect(endingX * 50 + 1.25, c.height - 3.75, 50 - 2.5, 3.75);
+	// Option To Save As Unanswered Image
+	var imagePng = c.toDataURL('image/png');
+	document.getElementById("imageDownload").href = imagePng.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
+	// Individual-Box Marking System
+	for (var x = 0; x < puzzleMatrix.length; x++) {
+		for (var y = 0; y < puzzleMatrix[x].length; y++) {
 			if (puzzleMatrix[x][y].m == true) {
 				ctx.beginPath();
 				ctx.fillRect(x * 50 + 12.5, y * 50 + 12.5, 25, 25);
@@ -153,8 +170,7 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 			}
 		}
 	}
-	ctx.rect(1.25, 1.25, c.width - 2.5, c.height - 2.5);
-	ctx.stroke();
-	ctx.clearRect(startingX * 50 + 1.25, 0, 50 - 2.5, 3.75);
-	ctx.clearRect(endingX * 50 + 1.25, c.height - 3.75, 50 - 2.5, 3.75);
+	// Option To Save As Answered Image
+	var answeredImagePng = c.toDataURL('image/png');
+	document.getElementById("answeredImageDownload").href = answeredImagePng.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
 }
