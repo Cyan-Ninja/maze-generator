@@ -119,7 +119,6 @@ function generatePuzzle() {
 
 	}
 	canvasDisplay(puzzleMatrix, startingX, endingX);
-	document.getElementById("working").style.display = "none";
 }
 
 function canvasDisplay(puzzleMatrix, startingX, endingX) {
