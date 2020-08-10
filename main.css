@@ -45,13 +45,11 @@ h2 {
 }
 
 input {
-	flex: 1;
 	border: solid 0.25vw #ccc;
 	background-color: #ddd;
 }
 
 button {
-	flex: 1;
 	border: solid 0.25vw #ccc;
 	background-color: #ddd;
 }

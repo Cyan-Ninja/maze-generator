@@ -1,7 +1,17 @@
-var puzzleWidth = 10;
-var puzzleHeight = 10;
-var puzzleFont = "Arial";
+var puzzleWidth = 20;
+var puzzleHeight = 20;
 function generatePuzzle() {
+	let puzzleWidthValue = document.getElementById("puzzleWidth").value, puzzleHeightValue = document.getElementById("puzzleHeight").value;
+	if (puzzleWidthValue != "") {
+		puzzleWidth = parseInt(puzzleWidthValue);
+	} else {
+		puzzleWidth = 20;
+	}
+	if (puzzleHeightValue != "") {
+		puzzleHeight = parseInt(puzzleHeightValue);
+	} else {
+		puzzleHeight = 20;
+	}
 	var puzzleMatrix = new Array(puzzleWidth);
 	for (var i = 0; i < puzzleMatrix.length; i++) {
 		puzzleMatrix[i] = new Array(puzzleHeight);
@@ -21,19 +31,46 @@ function generatePuzzle() {
 		// Get Directions
 		var directions = [];
 		if (currentY != 0) {
-			directions.push("N");
+			var partsNumValue = document.getElementById("nParts").value;
+			var partsNum = 1;
+			if (partsNumValue != "") {
+				partsNum = parseInt(partsNumValue);
+				console.log(partsNumValue);
+			}
+			for (var i = 0; i < partsNum; i++) {
+				directions.push("N");
+			}
 		}
 		if (currentX != 0) {
-			directions.push("E");
-			directions.push("E");
+			var partsNumValue = document.getElementById("eParts").value;
+			var partsNum = 2;
+			if (partsNumValue != "") {
+				partsNum = parseInt(partsNumValue);
+			}
+			for (var i = 0; i < partsNum; i++) {
+				directions.push("E");
+			}
 		}
 		if (currentX != puzzleWidth - 1) {
-			directions.push("W");
-			directions.push("W");
+			var partsNumValue = document.getElementById("wParts").value;
+			var partsNum = 2;
+			if (partsNumValue != "") {
+				partsNum = parseInt(partsNumValue);
+			}
+			for (var i = 0; i < partsNum; i++) {
+				directions.push("W");
+			}
 		}
-		directions.push("S");
-		directions.push("S");
-		directions.push("S");
+		if (true) {
+			var partsNumValue = document.getElementById("sParts").value;
+			var partsNum = 3;
+			if (partsNumValue != "") {
+				partsNum = parseInt(partsNumValue);
+			}
+			for (var i = 0; i < partsNum; i++) {
+				directions.push("S");
+			}
+		}
 		// Get Direction
 		var direction = directions[Math.floor(Math.random() * directions.length)];
 		console.log("Dir: " + direction + "  Dirs: " + directions);
@@ -121,5 +158,3 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 	ctx.clearRect(startingX * 50 + 1.25, 0, 50 - 2.5, 3.75);
 	ctx.clearRect(endingX * 50 + 1.25, c.height - 3.75, 50 - 2.5, 3.75);
 }
-
-generatePuzzle(); // TEMP: Just For Development

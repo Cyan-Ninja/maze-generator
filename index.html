@@ -8,12 +8,13 @@
 	</head>
 	<body>
 		<h1 id="title">Maze Generator</h1>
-		<div id="options">
-			<input type="text" id="puzzleWidth" placeholder="Width [Default: 20]">
-			<input type="text" id="puzzleHeight" placeholder="Height [Default: 20]">
-			<input type="text" id="puzzleFont" placeholder="Font [Default: Arial]">
-			<button type="button" id="generatePuzzle" onclick="generatePuzzle();">Generate Maze</button>
-		</div>
+			<input type="text" id="puzzleWidth" style="width:45vw;" placeholder="Width [Def: 20]">
+			<input type="text" id="puzzleHeight" style="width:45vw;" placeholder="Height [Def: 20]"><br>
+			<input type="text" id="nParts" style="width:22.5vw;" placeholder="North Parts [Def: 1]">
+			<input type="text" id="eParts" style="width:22.5vw;" placeholder="East Parts [Def: 2]">
+			<input type="text" id="wParts" style="width:22.5vw;" placeholder="West Parts [Def: 2]">
+			<input type="text" id="sParts" style="width:22.5vw;" placeholder="South Parts [Def: 3]"><br>
+			<button type="button" id="generatePuzzle" style="width:90vw;" onclick="generatePuzzle();">Generate Maze</button><br>
 		<canvas id="canvas">Your browser doesn't support the canvas tag, please update to a newer browser.</canvas><br>
 		<a href="" download="Puzzle.png" class="download" id="imageDownload">[Download Image]</a>
 		<a href="" download="AnsweredPuzzle.png" class="download" id="answeredImageDownload">[Download Answered Image]</a><br>
