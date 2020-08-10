@@ -1,5 +1,5 @@
-var puzzleWidth = 20;
-var puzzleHeight = 20;
+var puzzleWidth = 10;
+var puzzleHeight = 10;
 var puzzleFont = "Arial";
 function generatePuzzle() {
 	var puzzleMatrix = new Array(puzzleWidth);
@@ -17,6 +17,7 @@ function generatePuzzle() {
 	var currentX = startingX, currentY = 0;
 	var atBottom = false;
 	while (!atBottom) {
+		// Get Directions
 		var directions = [];
 		if (currentY != 0) {
 			directions.push("N");
@@ -28,8 +29,10 @@ function generatePuzzle() {
 			directions.push("W");
 		}
 		directions.push("S");
+		// Get Direction
 		var direction = directions[Math.floor(Math.random() * directions.length)];
 		console.log("Dir: " + direction + "  Dirs: " + directions);
+		// Actually Do In That Direction
 		switch (direction) {
 			case "N":
 				puzzleMatrix[currentX][currentY].x = false;
@@ -63,6 +66,7 @@ function generatePuzzle() {
 					break;
 				}
 		}
+		//
 
 		canvasDisplay(puzzleMatrix);
 
@@ -71,9 +75,27 @@ function generatePuzzle() {
 }
 
 function canvasDisplay(puzzleMatrix) {
+	var c = document.getElementById("canvas");
+	var ctx = c.getContext("2d");
+	c.width = puzzleWidth * 50;
+	c.height = puzzleHeight * 50;
+	ctx.clearRect(0, 0, c.width, c.height);
 	for (var x = 0; x < puzzleMatrix.length; x++) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
-			// CODE HERE
+			if (puzzleMatrix[x][y].x == true) {
+				ctx.beginPath();
+				ctx.moveTo(x * 50, y * 50);
+				ctx.lineTo(x * 50 + 50, y * 50);
+				ctx.stroke();
+				ctx.closePath();
+			}
+			if (puzzleMatrix[x][y].y == true) {
+				ctx.beginPath();
+				ctx.moveTo(x * 50, y * 50);
+				ctx.lineTo(x * 50, y * 50 + 50);
+				ctx.stroke();
+				ctx.closePath();
+			}
 		}
 	}
 }
