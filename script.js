@@ -13,7 +13,7 @@ function generatePuzzle() {
 	}
 	console.log(puzzleMatrix);
 	var startingX = Math.floor(Math.random() * puzzleWidth);
-	console.log(startingX);
+	console.log("StartingX: " + startingX);
 	var currentX = startingX, currentY = 0;
 	var atBottom = false;
 	while (!atBottom) {
@@ -30,10 +30,51 @@ function generatePuzzle() {
 		directions.push("S");
 		var direction = directions[Math.floor(Math.random() * directions.length)];
 		console.log("Dir: " + direction + "  Dirs: " + directions);
+		switch (direction) {
+			case "N":
+				puzzleMatrix[currentX][currentY].x = false;
+				currentY -= 1;
+				break;
+			case "E":
+				puzzleMatrix[currentX][currentY].y = false;
+				currentX -= 1;
+				break;
+			case "W":
+				puzzleMatrix[currentX + 1][currentY].y = false;
+				currentX += 1;
+				break;
+			case "S":
+				if (currentY == puzzleHeight - 1) {
+					atBottom = true;
+					break;
+				} else {
+					puzzleMatrix[currentX][currentY + 1].x = false;
+					currentY += 1;
+					break;
+				}
+			default:
+				direction = "S";
+				if (currentY == puzzleHeight - 1) {
+					atBottom = true;
+					break;
+				} else {
+					puzzleMatrix[currentX][currentY + 1].x = false;
+					currentY += 1;
+					break;
+				}
+		}
 
-		// CODE HERE
+		canvasDisplay(puzzleMatrix);
 
-		atBottom = true; // TEMP: Just For Development
+		//atBottom = true; // TEMP: Just For Development
+	}
+}
+
+function canvasDisplay(puzzleMatrix) {
+	for (var x = 0; x < puzzleMatrix.length; x++) {
+		for (var y = 0; y < puzzleMatrix[x].length; y++) {
+			// CODE HERE
+		}
 	}
 }
 
