@@ -108,7 +108,7 @@ function generatePuzzle() {
 					break;
 				} else {
 					var randomDistance = Math.floor(Math.random() * (puzzleHeight - currentY) / 4 + 1);
-					for (var i = 0; i < randomDistance; i++) {
+					for (var i = 0; i <= randomDistance; i++) {
 						puzzleMatrix[currentX][currentY + i].x = false;
 						puzzleMatrix[currentX][currentY + i].m = true;
 					}
