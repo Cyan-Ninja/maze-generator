@@ -125,7 +125,7 @@ function generatePuzzle() {
 	function addSecondaryPath(answerTile) {
 		console.log(answerTile);
 		var currentX = answerTile.x, currentY = answerTile.y;
-		do {
+		 while (Math.random() > 0.9) {
 			// Get Directions
 			var directions = [];
 			if (currentY != 0) {
@@ -208,7 +208,7 @@ function generatePuzzle() {
 						break;
 					}
 			}
-		} while (Math.random() > 0.9);
+		}
 	}
 	for (var i = 0; i < answerTiles.length; i++) {
 		addSecondaryPath(answerTiles[i]);
