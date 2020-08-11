@@ -82,6 +82,7 @@ function generatePuzzle() {
 				for (var i = 0; i <= randomDistance; i++) {
 					puzzleMatrix[currentX][currentY - i].x = false;
 					puzzleMatrix[currentX][currentY - i].m = true;
+					answerTiles.push({x: currentX, y: currentY - i});
 				}
 				currentY -= randomDistance;
 				break;
@@ -90,6 +91,7 @@ function generatePuzzle() {
 				for (var i = 0; i <= randomDistance; i++) {
 					puzzleMatrix[currentX - i][currentY].y = false;
 					puzzleMatrix[currentX - i][currentY].m = true;
+					answerTiles.push({x: currentX - 1, y: currentY});
 				}
 				currentX -= randomDistance;
 				break;
@@ -98,6 +100,7 @@ function generatePuzzle() {
 				for (var i = 0; i <= randomDistance; i++) {
 					puzzleMatrix[currentX + i][currentY].y = false;
 					puzzleMatrix[currentX + i][currentY].m = true;
+					answerTiles.push({x: currentX + 1, y: currentY});
 				}
 				currentX += randomDistance;
 				break;
@@ -111,6 +114,7 @@ function generatePuzzle() {
 					for (var i = 0; i <= randomDistance; i++) {
 						puzzleMatrix[currentX][currentY + i].x = false;
 						puzzleMatrix[currentX][currentY + i].m = true;
+						answerTiles.push({x: currentX, y: currentY + i});
 					}
 					currentY += randomDistance;
 					break;
@@ -118,6 +122,12 @@ function generatePuzzle() {
 		}
 	}
 	console.log(answerTiles);
+	function addSecondaryPath() {
+		// CODE HERE
+	}
+	for (var i = 0; i < answerTiles.length; i++) {
+		addSecondaryPath(answerTiles[i]);
+	}
 	canvasDisplay(puzzleMatrix, startingX, endingX);
 }
 
