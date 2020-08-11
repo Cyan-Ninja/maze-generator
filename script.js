@@ -124,52 +124,91 @@ function generatePuzzle() {
 	console.log(answerTiles);
 	function addSecondaryPath(answerTile) {
 		console.log(answerTile);
-		// Get Directions
 		var currentX = answerTile.x, currentY = answerTile.y;
-		var directions = [];
-		if (currentY != 0) {
-			var partsNumValue = document.getElementById("nParts").value;
-			var partsNum = 1;
-			if (partsNumValue != "") {
-				partsNum = parseInt(partsNumValue);
-				console.log(partsNumValue);
+		do {
+			// Get Directions
+			var directions = [];
+			if (currentY != 0) {
+				var partsNumValue = document.getElementById("nParts").value;
+				var partsNum = 1;
+				if (partsNumValue != "") {
+					partsNum = parseInt(partsNumValue);
+					console.log(partsNumValue);
+				}
+				for (var i = 0; i < partsNum; i++) {
+					directions.push("N");
+				}
 			}
-			for (var i = 0; i < partsNum; i++) {
-				directions.push("N");
+			if (currentX != 0) {
+				var partsNumValue = document.getElementById("eParts").value;
+				var partsNum = 2;
+				if (partsNumValue != "") {
+					partsNum = parseInt(partsNumValue);
+				}
+				for (var i = 0; i < partsNum; i++) {
+					directions.push("E");
+				}
 			}
-		}
-		if (currentX != 0) {
-			var partsNumValue = document.getElementById("eParts").value;
-			var partsNum = 2;
-			if (partsNumValue != "") {
-				partsNum = parseInt(partsNumValue);
+			if (currentX != puzzleWidth - 1) {
+				var partsNumValue = document.getElementById("wParts").value;
+				var partsNum = 2;
+				if (partsNumValue != "") {
+					partsNum = parseInt(partsNumValue);
+				}
+				for (var i = 0; i < partsNum; i++) {
+					directions.push("W");
+				}
 			}
-			for (var i = 0; i < partsNum; i++) {
-				directions.push("E");
+			if (currentY != puzzleWidth - 1) {
+				var partsNumValue = document.getElementById("sParts").value;
+				var partsNum = 3;
+				if (partsNumValue != "") {
+					partsNum = parseInt(partsNumValue);
+				}
+				for (var i = 0; i < partsNum; i++) {
+					directions.push("S");
+				}
 			}
-		}
-		if (currentX != puzzleWidth - 1) {
-			var partsNumValue = document.getElementById("wParts").value;
-			var partsNum = 2;
-			if (partsNumValue != "") {
-				partsNum = parseInt(partsNumValue);
+			// Get Direction
+			var direction = directions[Math.floor(Math.random() * directions.length)];
+			// Set In That Direction
+			switch (direction) {
+				case "N":
+					var randomDistance = Math.floor(Math.random() * currentY / 4);
+					for (var i = 0; i <= randomDistance; i++) {
+						puzzleMatrix[currentX][currentY - i].x = false;
+					}
+					currentY -= randomDistance;
+					break;
+				case "E":
+					var randomDistance = Math.floor(Math.random() * currentX / 4 + 1);
+					for (var i = 0; i <= randomDistance; i++) {
+						puzzleMatrix[currentX - i][currentY].y = false;
+					}
+					currentX -= randomDistance;
+					break;
+				case "W":
+					var randomDistance = Math.floor(Math.random() * (puzzleWidth - currentX) / 4 + 1);
+					for (var i = 0; i <= randomDistance; i++) {
+						puzzleMatrix[currentX + i][currentY].y = false;
+					}
+					currentX += randomDistance;
+					break;
+				case "S":
+					if (currentY == puzzleHeight - 1) {
+						atBottom = true;
+						endingX = currentX;
+						break;
+					} else {
+						var randomDistance = Math.floor(Math.random() * (puzzleHeight - currentY) / 4 + 1);
+						for (var i = 0; i <= randomDistance; i++) {
+							puzzleMatrix[currentX][currentY + i].x = false;
+						}
+						currentY += randomDistance;
+						break;
+					}
 			}
-			for (var i = 0; i < partsNum; i++) {
-				directions.push("W");
-			}
-		}
-		if (currentY != puzzleWidth - 1) {
-			var partsNumValue = document.getElementById("sParts").value;
-			var partsNum = 3;
-			if (partsNumValue != "") {
-				partsNum = parseInt(partsNumValue);
-			}
-			for (var i = 0; i < partsNum; i++) {
-				directions.push("S");
-			}
-		}
-		// Get Direction
-		var direction = directions[Math.floor(Math.random() * directions.length)];
+		} while (Math.random() > 0.9);
 	}
 	for (var i = 0; i < answerTiles.length; i++) {
 		addSecondaryPath(answerTiles[i]);
@@ -229,4 +268,3 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 	var answeredImagePng = c.toDataURL('image/png');
 	document.getElementById("answeredImageDownload").href = answeredImagePng.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
 }
-generatePuzzle();
