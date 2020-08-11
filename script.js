@@ -18,7 +18,7 @@ function generatePuzzle() {
 	}
 	for (var x = 0; x < puzzleMatrix.length; x++) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
-			puzzleMatrix[x][y] = {x: Math.random() < 0.5, y: Math.random() < 0.5, m: false};
+			puzzleMatrix[x][y] = {x: true, y: true, m: false};
 		}
 	}
 	console.log(puzzleMatrix);
@@ -26,6 +26,7 @@ function generatePuzzle() {
 	console.log("StartingX: " + startingX);
 	var currentX = startingX, currentY = 0;
 	puzzleMatrix[currentX][currentY].m = true;
+	var answerTiles = [{x: currentX, y: currentY}];
 	var atBottom = false;
 	while (!atBottom) {
 		// Get Directions
@@ -77,19 +78,28 @@ function generatePuzzle() {
 		// Actually Do In That Direction
 		switch (direction) {
 			case "N":
-				puzzleMatrix[currentX][currentY].x = false;
-				currentY -= 1;
-				puzzleMatrix[currentX][currentY].m = true;
+				var randomDistance = Math.floor(Math.random() * currentY / 4);
+				for (var i = 0; i <= randomDistance; i++) {
+					puzzleMatrix[currentX][currentY - i].x = false;
+					puzzleMatrix[currentX][currentY - i].m = true;
+				}
+				currentY -= randomDistance;
 				break;
 			case "E":
-				puzzleMatrix[currentX][currentY].y = false;
-				currentX -= 1;
-				puzzleMatrix[currentX][currentY].m = true;
+				var randomDistance = Math.floor(Math.random() * currentX / 4 + 1);
+				for (var i = 0; i <= randomDistance; i++) {
+					puzzleMatrix[currentX - i][currentY].y = false;
+					puzzleMatrix[currentX - i][currentY].m = true;
+				}
+				currentX -= randomDistance;
 				break;
 			case "W":
-				puzzleMatrix[currentX + 1][currentY].y = false;
-				currentX += 1;
-				puzzleMatrix[currentX][currentY].m = true;
+				var randomDistance = Math.floor(Math.random() * (puzzleWidth - currentX) / 4 + 1);
+				for (var i = 0; i <= randomDistance; i++) {
+					puzzleMatrix[currentX + i][currentY].y = false;
+					puzzleMatrix[currentX + i][currentY].m = true;
+				}
+				currentX += randomDistance;
 				break;
 			case "S":
 				if (currentY == puzzleHeight - 1) {
@@ -97,26 +107,17 @@ function generatePuzzle() {
 					endingX = currentX;
 					break;
 				} else {
-					puzzleMatrix[currentX][currentY + 1].x = false;
-					currentY += 1;
-					puzzleMatrix[currentX][currentY].m = true;
-					break;
-				}
-			default:
-				direction = "S";
-				if (currentY == puzzleHeight - 1) {
-					atBottom = true;
-					endingX = currentX;
-					break;
-				} else {
-					puzzleMatrix[currentX][currentY + 1].x = false;
-					currentY += 1;
-					puzzleMatrix[currentX][currentY].m = true;
+					var randomDistance = Math.floor(Math.random() * (puzzleHeight - currentY) / 4 + 1);
+					for (var i = 0; i < randomDistance; i++) {
+						puzzleMatrix[currentX][currentY + i].x = false;
+						puzzleMatrix[currentX][currentY + i].m = true;
+					}
+					currentY += randomDistance;
 					break;
 				}
 		}
-
 	}
+	console.log(answerTiles);
 	canvasDisplay(puzzleMatrix, startingX, endingX);
 }
 
@@ -158,7 +159,7 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 	var imagePng = c.toDataURL('image/png');
 	document.getElementById("imageDownload").href = imagePng.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
 	// Individual-Box Marking System
-	for (var x = 0; x < puzzleMatrix.length; x++) {
+	/*for (var x = 0; x < puzzleMatrix.length; x++) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
 			if (puzzleMatrix[x][y].m == true) {
 				ctx.beginPath();
@@ -167,8 +168,9 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 				ctx.closePath();
 			}
 		}
-	}
+	}*/
 	// Option To Save As Answered Image
 	var answeredImagePng = c.toDataURL('image/png');
 	document.getElementById("answeredImageDownload").href = answeredImagePng.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
 }
+generatePuzzle();
