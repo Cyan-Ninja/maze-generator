@@ -122,8 +122,8 @@ function generatePuzzle() {
 		}
 	}
 	console.log(answerTiles);
-	function addSecondaryPath() {
-		// CODE HERE
+	function addSecondaryPath(answerTile) {
+		console.log(answerTile);
 	}
 	for (var i = 0; i < answerTiles.length; i++) {
 		addSecondaryPath(answerTiles[i]);
