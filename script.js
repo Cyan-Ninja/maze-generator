@@ -124,6 +124,52 @@ function generatePuzzle() {
 	console.log(answerTiles);
 	function addSecondaryPath(answerTile) {
 		console.log(answerTile);
+		// Get Directions
+		var currentX = answerTile.x, currentY = answerTile.y;
+		var directions = [];
+		if (currentY != 0) {
+			var partsNumValue = document.getElementById("nParts").value;
+			var partsNum = 1;
+			if (partsNumValue != "") {
+				partsNum = parseInt(partsNumValue);
+				console.log(partsNumValue);
+			}
+			for (var i = 0; i < partsNum; i++) {
+				directions.push("N");
+			}
+		}
+		if (currentX != 0) {
+			var partsNumValue = document.getElementById("eParts").value;
+			var partsNum = 2;
+			if (partsNumValue != "") {
+				partsNum = parseInt(partsNumValue);
+			}
+			for (var i = 0; i < partsNum; i++) {
+				directions.push("E");
+			}
+		}
+		if (currentX != puzzleWidth - 1) {
+			var partsNumValue = document.getElementById("wParts").value;
+			var partsNum = 2;
+			if (partsNumValue != "") {
+				partsNum = parseInt(partsNumValue);
+			}
+			for (var i = 0; i < partsNum; i++) {
+				directions.push("W");
+			}
+		}
+		if (currentY != puzzleWidth - 1) {
+			var partsNumValue = document.getElementById("sParts").value;
+			var partsNum = 3;
+			if (partsNumValue != "") {
+				partsNum = parseInt(partsNumValue);
+			}
+			for (var i = 0; i < partsNum; i++) {
+				directions.push("S");
+			}
+		}
+		// Get Direction
+		var direction = directions[Math.floor(Math.random() * directions.length)];
 	}
 	for (var i = 0; i < answerTiles.length; i++) {
 		addSecondaryPath(answerTiles[i]);
