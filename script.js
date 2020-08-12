@@ -26,7 +26,7 @@ function generatePuzzle() {
 	console.log("StartingX: " + startingX);
 	var currentX = startingX, currentY = 0;
 	puzzleMatrix[currentX][currentY].f = true;
-	puzzleMatrix[currentX][currentY].m = true;
+	//puzzleMatrix[currentX][currentY].m = true;
 	var filledAll = false;
 	while (!filledAll) {
 		// Get All Unfilled Tiles
@@ -108,98 +108,9 @@ function generatePuzzle() {
 				puzzleMatrix[unfilledItem.x + 1][unfilledItem.y].y = false;
 				break;
 		}
-
-		//filledAll = true; // TEMP: Development Catch-All
-		/*
-		// Get Directions
-		var directions = [];
-		if (currentY != 0) {
-			var partsNumValue = document.getElementById("nParts").value;
-			var partsNum = 1;
-			if (partsNumValue != "") {
-				partsNum = parseInt(partsNumValue);
-				console.log(partsNumValue);
-			}
-			for (var i = 0; i < partsNum; i++) {
-				directions.push("N");
-			}
-		}
-		if (currentX != 0) {
-			var partsNumValue = document.getElementById("eParts").value;
-			var partsNum = 2;
-			if (partsNumValue != "") {
-				partsNum = parseInt(partsNumValue);
-			}
-			for (var i = 0; i < partsNum; i++) {
-				directions.push("E");
-			}
-		}
-		if (currentX != puzzleWidth - 1) {
-			var partsNumValue = document.getElementById("wParts").value;
-			var partsNum = 2;
-			if (partsNumValue != "") {
-				partsNum = parseInt(partsNumValue);
-			}
-			for (var i = 0; i < partsNum; i++) {
-				directions.push("W");
-			}
-		}
-		if (true) {
-			var partsNumValue = document.getElementById("sParts").value;
-			var partsNum = 3;
-			if (partsNumValue != "") {
-				partsNum = parseInt(partsNumValue);
-			}
-			for (var i = 0; i < partsNum; i++) {
-				directions.push("S");
-			}
-		}
-		// Get Direction
-		var direction = directions[Math.floor(Math.random() * directions.length)];
-		console.log("Dir: " + direction + "  Dirs: " + directions);
-		// Actually Do In That Direction
-		switch (direction) {
-			case "N":
-				puzzleMatrix[currentX][currentY].x = false;
-				currentY -= 1;
-				puzzleMatrix[currentX][currentY].m = true;
-				break;
-			case "E":
-				puzzleMatrix[currentX][currentY].y = false;
-				currentX -= 1;
-				puzzleMatrix[currentX][currentY].m = true;
-				break;
-			case "W":
-				puzzleMatrix[currentX + 1][currentY].y = false;
-				currentX += 1;
-				puzzleMatrix[currentX][currentY].m = true;
-				break;
-			case "S":
-				if (currentY == puzzleHeight - 1) {
-					atBottom = true;
-					endingX = currentX;
-					break;
-				} else {
-					puzzleMatrix[currentX][currentY + 1].x = false;
-					currentY += 1;
-					puzzleMatrix[currentX][currentY].m = true;
-					break;
-				}
-			default:
-				direction = "S";
-				if (currentY == puzzleHeight - 1) {
-					atBottom = true;
-					endingX = currentX;
-					break;
-				} else {
-					puzzleMatrix[currentX][currentY + 1].x = false;
-					currentY += 1;
-					puzzleMatrix[currentX][currentY].m = true;
-					break;
-				}
-		}
-		*/
 	}
+	endingX = Math.floor(Math.random() * puzzleWidth);
+
 	canvasDisplay(puzzleMatrix, startingX, endingX);
 }
 
