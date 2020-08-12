@@ -18,7 +18,6 @@ function generatePuzzle() {
 	}
 	for (var x = 0; x < puzzleMatrix.length; x++) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
-			puzzleMatrix[x][y] = {x: Math.random() > 0.5, y: Math.random() > 0.5, m: false};
 		}
 	}
 	console.log(puzzleMatrix);
@@ -26,9 +25,6 @@ function generatePuzzle() {
 	console.log("StartingX: " + startingX);
 	var currentX = startingX, currentY = 0;
 	puzzleMatrix[currentX][currentY].m = true;
-	var answerTiles = [{x: currentX, y: currentY}];
-	var atBottom = false;
-	while (!atBottom) {
 		// Get Directions
 		var directions = [];
 		if (currentY != 0) {
@@ -78,52 +74,10 @@ function generatePuzzle() {
 		// Actually Do In That Direction
 		switch (direction) {
 			case "N":
-				var randomDistance = Math.floor(Math.random() * currentY / 4);
-				var firstI = true;
-				for (var i = 0; i <= randomDistance; i++) {
-					puzzleMatrix[currentX][currentY - i].x = false;
-					if (firstI) {
-						firstI = false
-					} else {
-						puzzleMatrix[currentX][currentY - i].y = true;
-						//puzzleMatrix[currentX + 1][currentY - i].y = true;
-					}
-					puzzleMatrix[currentX][currentY - i].m = true;
-					answerTiles.push({x: currentX, y: currentY - i});
-				}
-				currentY -= randomDistance;
 				break;
 			case "E":
-				var randomDistance = Math.floor(Math.random() * currentX / 4 + 1);
-				var firstI = true;
-				for (var i = 0; i <= randomDistance; i++) {
-					puzzleMatrix[currentX - i][currentY].y = false;
-					if (firstI) {
-						firstI = false
-					} else {
-						puzzleMatrix[currentX - i][currentY].x = true;
-						//puzzleMatrix[currentX - i][currentY + 1].x = true;
-					}
-					puzzleMatrix[currentX - i][currentY].m = true;
-					answerTiles.push({x: currentX - 1, y: currentY});
-				}
-				currentX -= randomDistance;
 				break;
 			case "W":
-				var randomDistance = Math.floor(Math.random() * (puzzleWidth - currentX) / 4 + 1);
-				var firstI = true;
-				for (var i = 0; i <= randomDistance; i++) {
-					puzzleMatrix[currentX + i][currentY].y = false;
-					if (firstI) {
-						firstI = false
-					} else {
-						puzzleMatrix[currentX + i][currentY].x = true;
-						//puzzleMatrix[currentX + i][currentY + 1].x = true;
-					}
-					puzzleMatrix[currentX + i][currentY].m = true;
-					answerTiles.push({x: currentX + 1, y: currentY});
-				}
-				currentX += randomDistance;
 				break;
 			case "S":
 				if (currentY == puzzleHeight - 1) {
@@ -131,147 +85,11 @@ function generatePuzzle() {
 					endingX = currentX;
 					break;
 				} else {
-					var randomDistance = Math.floor(Math.random() * (puzzleHeight - currentY) / 4 + 1);
-					var firstI = true;
-					for (var i = 0; i <= randomDistance; i++) {
-						puzzleMatrix[currentX][currentY + i].x = false;
-						if (firstI) {
-							firstI = false
-						} else {
-							puzzleMatrix[currentX][currentY + i].y = true;
-							//puzzleMatrix[currentX + 1][currentY + i].y = true;
-						}
-						puzzleMatrix[currentX][currentY + i].m = true;
-						answerTiles.push({x: currentX, y: currentY + i});
-					}
-					currentY += randomDistance;
 					break;
 				}
+					break;
+					break;
 		}
-	}
-	console.log(answerTiles);
-	function addSecondaryPath(answerTile) {
-		console.log(answerTile);
-		var currentX = answerTile.x, currentY = answerTile.y;
-		 while (Math.random() > 0.6) {
-			// Get Directions
-			var directions = [];
-			if (currentY != 0) {
-				var partsNumValue = document.getElementById("nParts").value;
-				var partsNum = 1;
-				if (partsNumValue != "") {
-					partsNum = parseInt(partsNumValue);
-					console.log(partsNumValue);
-				}
-				for (var i = 0; i < partsNum; i++) {
-					directions.push("N");
-				}
-			}
-			if (currentX != 0) {
-				var partsNumValue = document.getElementById("eParts").value;
-				var partsNum = 2;
-				if (partsNumValue != "") {
-					partsNum = parseInt(partsNumValue);
-				}
-				for (var i = 0; i < partsNum; i++) {
-					directions.push("E");
-				}
-			}
-			if (currentX != puzzleWidth - 1) {
-				var partsNumValue = document.getElementById("wParts").value;
-				var partsNum = 2;
-				if (partsNumValue != "") {
-					partsNum = parseInt(partsNumValue);
-				}
-				for (var i = 0; i < partsNum; i++) {
-					directions.push("W");
-				}
-			}
-			if (currentY != puzzleWidth - 1) {
-				var partsNumValue = document.getElementById("sParts").value;
-				var partsNum = 3;
-				if (partsNumValue != "") {
-					partsNum = parseInt(partsNumValue);
-				}
-				for (var i = 0; i < partsNum; i++) {
-					directions.push("S");
-				}
-			}
-			// Get Direction
-			var direction = directions[Math.floor(Math.random() * directions.length)];
-			// Set In That Direction
-			switch (direction) {
-				case "N":
-					var randomDistance = Math.floor(Math.random() * currentY / 4);
-					var firstI = true;
-					for (var i = 0; i <= randomDistance; i++) {
-						puzzleMatrix[currentX][currentY - i].x = false;
-						if (firstI) {
-							firstI = false
-						} else {
-							puzzleMatrix[currentX][currentY - i].y = true;
-							//puzzleMatrix[currentX + 1][currentY - i].y = true;
-						}
-					}
-					currentY -= randomDistance;
-					break;
-				case "E":
-					var randomDistance = Math.floor(Math.random() * currentX / 4 + 1);
-					var firstI = true;
-					for (var i = 0; i <= randomDistance; i++) {
-						puzzleMatrix[currentX - i][currentY].y = false;
-						if (firstI) {
-							firstI = false
-						} else {
-							puzzleMatrix[currentX - i][currentY].x = true;
-							//puzzleMatrix[currentX - i][currentY + 1].x = true;
-						}
-					}
-					currentX -= randomDistance;
-					break;
-				case "W":
-					var randomDistance = Math.floor(Math.random() * (puzzleWidth - currentX) / 4 + 1);
-					var firstI = true;
-					for (var i = 0; i <= randomDistance; i++) {
-						puzzleMatrix[currentX + i][currentY].y = false;
-						if (firstI) {
-							firstI = false
-						} else {
-							puzzleMatrix[currentX + i][currentY].x = true;
-							//puzzleMatrix[currentX + i][currentY + 1].x = true;
-						}
-					}
-					currentX += randomDistance;
-					break;
-				case "S":
-					if (currentY == puzzleHeight - 1) {
-						atBottom = true;
-						endingX = currentX;
-						break;
-					} else {
-						var randomDistance = Math.floor(Math.random() * (puzzleHeight - currentY) / 4 + 1);
-						var firstI = true;
-						for (var i = 0; i <= randomDistance; i++) {
-							puzzleMatrix[currentX][currentY + i].x = false;
-							if (firstI) {
-								firstI = false
-							} else {
-								puzzleMatrix[currentX][currentY + i].y = true;
-								//puzzleMatrix[currentX + 1][currentY + i].y = true;
-							}
-						}
-						currentY += randomDistance;
-						break;
-					}
-			}
-		}
-	}
-	function addSecondaryPathRand() {
-		// CODE HERE
-	}
-	for (var i = 0; i < answerTiles.length; i++) {
-		addSecondaryPath(answerTiles[i]);
-		//addSecondaryPathRand();
 	}
 	canvasDisplay(puzzleMatrix, startingX, endingX);
 }
@@ -314,7 +132,6 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 	var imagePng = c.toDataURL('image/png');
 	document.getElementById("imageDownload").href = imagePng.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
 	// Individual-Box Marking System
-	/*for (var x = 0; x < puzzleMatrix.length; x++) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
 			if (puzzleMatrix[x][y].m == true) {
 				ctx.beginPath();
@@ -323,7 +140,6 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 				ctx.closePath();
 			}
 		}
-	}*/
 	// Option To Save As Answered Image
 	var answeredImagePng = c.toDataURL('image/png');
 	document.getElementById("answeredImageDownload").href = answeredImagePng.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
