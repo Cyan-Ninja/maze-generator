@@ -153,6 +153,7 @@ function generatePuzzle() {
 	function addSecondaryPath(answerTile) {
 		console.log(answerTile);
 <<<<<<< HEAD
+<<<<<<< HEAD
 		var currentX = answerTile.x, currentY = answerTile.y;
 		 while (Math.random() > 0.6) {
 			// Get Directions
@@ -269,6 +270,8 @@ function generatePuzzle() {
 	}
 	function addSecondaryPathRand() {
 		// CODE HERE
+=======
+>>>>>>> parent of 87f97cd... Added direction part to secondary paths function.
 =======
 >>>>>>> parent of 87f97cd... Added direction part to secondary paths function.
 	}
