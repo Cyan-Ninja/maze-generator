@@ -32,7 +32,7 @@ function generatePuzzle() {
 		// Get All Unfilled Tiles
 		var unfilledItemsPuzzleMatrix = [];
 		for (var x = 0; x < puzzleWidth; x++) {
-			for (var y = 0; y < puzzleWidth; y++) {
+			for (var y = 0; y < puzzleHeight; y++) {
 				if (puzzleMatrix[x][y].f == false) {
 					unfilledItemsPuzzleMatrix.push({x: x, y: y});
 				}
