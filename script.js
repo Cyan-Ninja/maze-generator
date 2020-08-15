@@ -212,15 +212,15 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
 			if (puzzleMatrix[x][y].x == true) {
 				ctx.beginPath();
-				ctx.moveTo(x * 50, y * 50);
-				ctx.lineTo(x * 50 + 50, y * 50);
+				ctx.moveTo(x * 50 - 1.5, y * 50);
+				ctx.lineTo(x * 50 + 51.5, y * 50);
 				ctx.stroke();
 				ctx.closePath();
 			}
 			if (puzzleMatrix[x][y].y == true) {
 				ctx.beginPath();
-				ctx.moveTo(x * 50, y * 50);
-				ctx.lineTo(x * 50, y * 50 + 50);
+				ctx.moveTo(x * 50, y * 50 - 1.5);
+				ctx.lineTo(x * 50, y * 50 + 51.5);
 				ctx.stroke();
 				ctx.closePath();
 			}
