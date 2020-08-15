@@ -45,7 +45,7 @@ function generatePuzzle() {
 		}
 		if (currentX != 0 && puzzleMatrix[currentX - 1][currentY].f == false) {
 			var partsNumValue = document.getElementById("eParts").value;
-			var partsNum = 1;
+			var partsNum = 2;
 			if (partsNumValue != "") {
 				partsNum = parseInt(partsNumValue);
 			}
@@ -55,7 +55,7 @@ function generatePuzzle() {
 		}
 		if (currentX != puzzleWidth - 1 && puzzleMatrix[currentX + 1][currentY].f == false) {
 			var partsNumValue = document.getElementById("wParts").value;
-			var partsNum = 1;
+			var partsNum = 2;
 			if (partsNumValue != "") {
 				partsNum = parseInt(partsNumValue);
 			}
@@ -65,7 +65,7 @@ function generatePuzzle() {
 		}
 		if (true) {
 			var partsNumValue = document.getElementById("sParts").value;
-			var partsNum = 2;
+			var partsNum = 1;
 			if (partsNumValue != "") {
 				partsNum = parseInt(partsNumValue);
 			}
