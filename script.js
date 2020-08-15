@@ -18,7 +18,7 @@ function generatePuzzle() {
 	}
 	for (var x = 0; x < puzzleMatrix.length; x++) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
-			puzzleMatrix[x][y] = {x: true, y: true, f: false, m: false};
+			puzzleMatrix[x][y] = {x: true, y: true, f: false};
 		}
 	}
 	console.log(puzzleMatrix);
@@ -26,7 +26,6 @@ function generatePuzzle() {
 	console.log("StartingX: " + startingX);
 	var currentX = startingX, currentY = 0;
 	puzzleMatrix[currentX][currentY].f = true;
-	puzzleMatrix[currentX][currentY].m = true;
 	var answerTiles = [];
 	var atBottom = false;
 	while (!atBottom) {
@@ -80,20 +79,20 @@ function generatePuzzle() {
 		switch (direction) {
 			case "N":
 				puzzleMatrix[currentX][currentY].f = true;
-				puzzleMatrix[currentX][currentY - 1].m = true;
 				puzzleMatrix[currentX][currentY].x = false;
+				answerTiles.push({sX: currentX, sY: currentY, eX: currentX, eY: currentY - 1});
 				currentY -= 1;
 				break;
 			case "E":
 				puzzleMatrix[currentX][currentY].f = true;
-				puzzleMatrix[currentX - 1][currentY].m = true;
 				puzzleMatrix[currentX][currentY].y = false;
+				answerTiles.push({sX: currentX, sY: currentY, eX: currentX - 1, eY: currentY});
 				currentX -= 1;
 				break;
 			case "W":
 				puzzleMatrix[currentX][currentY].f = true;
-				puzzleMatrix[currentX + 1][currentY].m = true;
 				puzzleMatrix[currentX + 1][currentY].y = false;
+				answerTiles.push({sX: currentX, sY: currentY, eX: currentX + 1, eY: currentY});
 				currentX += 1;
 				break;
 			case "S":
@@ -103,8 +102,8 @@ function generatePuzzle() {
 					break;
 				} else {
 					puzzleMatrix[currentX][currentY].f = true;
-					puzzleMatrix[currentX][currentY + 1].m = true;
 					puzzleMatrix[currentX][currentY + 1].x = false;
+					answerTiles.push({sX: currentX, sY: currentY, eX: currentX, eY: currentY + 1});
 					currentY += 1;
 					break;
 				}
@@ -233,17 +232,8 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 	// Option To Save As Unanswered Image
 	var imagePng = c.toDataURL('image/png');
 	document.getElementById("imageDownload").href = imagePng.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
-	// Individual-Box Marking System
-	for (var x = 0; x < puzzleMatrix.length; x++) {
-		for (var y = 0; y < puzzleMatrix[x].length; y++) {
-			if (puzzleMatrix[x][y].m == true) {
-				ctx.beginPath();
-				ctx.fillRect(x * 50 + 15.625, y * 50 + 15.625, 18.75, 18.75);
-				ctx.stroke();
-				ctx.closePath();
-			}
-		}
-	}
+	// Solution Marking System
+	//CODE_HERE
 	// Option To Save As Answered Image
 	var answeredImagePng = c.toDataURL('image/png');
 	document.getElementById("answeredImageDownload").href = answeredImagePng.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
