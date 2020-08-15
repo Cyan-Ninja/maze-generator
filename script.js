@@ -236,10 +236,22 @@ function canvasDisplay(puzzleMatrix, startingX, endingX, answerLines) {
 	ctx.lineTo(startingX * 50 + 25, 26.5);
 	ctx.stroke();
 	ctx.closePath();
+	ctx.beginPath();
+	ctx.moveTo(startingX * 50 + 12.5, 3.125);
+	ctx.lineTo(startingX * 50 + 25, 15.625);
+	ctx.lineTo(startingX * 50 + 37.5, 3.125);
+	ctx.stroke();
+	ctx.closePath();
 		// Ending X Line
 	ctx.beginPath();
 	ctx.moveTo(endingX * 50 + 25, c.height - 26.5);
 	ctx.lineTo(endingX * 50 + 25, c.height);
+	ctx.stroke();
+	ctx.closePath();
+	ctx.beginPath();
+	ctx.moveTo(endingX * 50 + 12.5, c.height - 26.5 + 6.25);
+	ctx.lineTo(endingX * 50 + 25, c.height - 6.25);
+	ctx.lineTo(endingX * 50 + 37.5, c.height - 26.5 + 6.25);
 	ctx.stroke();
 	ctx.closePath();
 	for (var i = 0; i < answerLines.length; i++) {
