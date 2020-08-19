@@ -233,6 +233,46 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 	// Option To Save As Unanswered Image
 	var imagePng = c.toDataURL('image/png');
 	document.getElementById("imageDownload").href = imagePng.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
+	// Remove Bad Boxes
+	do {
+		var goAgain = false;
+		for (var x = 0; x < puzzleMatrix.length; x++) {
+			for (var y = 0; y < puzzleMatrix[x].length; y++) {
+				if (puzzleMatrix[x][y].m == true) {
+					var touches = 0;
+					if (y - 1 >= 0) { // North Connection
+						if (puzzleMatrix[x][y - 1].m == true && puzzleMatrix[x][y].x == false) {
+							touches++;
+						}
+					} else if (y - 1 < 0 && x == startingX) { // Starting North Connection
+						touches++;
+					}
+					if (y + 1 < puzzleHeight) { // North Connection
+						if (puzzleMatrix[x][y + 1].m == true && puzzleMatrix[x][y + 1].x == false) {
+							touches++;
+						}
+					} else if (y + 1 == puzzleHeight && x == endingX) { // Ending South Connection
+						touches++;
+					}
+					if (x - 1 >= 0) { // West Connection
+						if (puzzleMatrix[x - 1][y].m == true && puzzleMatrix[x][y].y == false) {
+							touches++;
+						}
+					}
+					if (x + 1 < puzzleWidth) { // East Connection
+						if (puzzleMatrix[x + 1][y].m == true && puzzleMatrix[x + 1][y].y == false) {
+							touches++;
+						}
+					}
+					if (touches < 2) {
+						console.warn("Touches: " + touches);
+						puzzleMatrix[x][y].m = false;
+						goAgain = true;
+					}
+				}
+			}
+		}
+	} while (goAgain);
 	// Individual-Box Marking System
 	for (var x = 0; x < puzzleMatrix.length; x++) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
@@ -244,9 +284,9 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 			}
 		}
 	}
+	// Line Marking System
+		// TODO AFTER
 	// Option To Save As Answered Image
 	var answeredImagePng = c.toDataURL('image/png');
 	document.getElementById("answeredImageDownload").href = answeredImagePng.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
 }
-
-//generatePuzzle(); // TEMP: Just For Development Ease
