@@ -18,7 +18,7 @@ function generatePuzzle() {
 	}
 	for (var x = 0; x < puzzleMatrix.length; x++) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
-			puzzleMatrix[x][y] = {x: true, y: true, f: false};
+			puzzleMatrix[x][y] = {x: true, y: true, f: false, m: false};
 		}
 	}
 	console.log(puzzleMatrix);
@@ -26,7 +26,8 @@ function generatePuzzle() {
 	console.log("StartingX: " + startingX);
 	var currentX = startingX, currentY = 0;
 	puzzleMatrix[currentX][currentY].f = true;
-	var answerLines = [];
+	puzzleMatrix[currentX][currentY].m = true;
+	var answerTiles = [];
 	var atBottom = false;
 	while (!atBottom) {
 		// Get Directions
@@ -79,20 +80,20 @@ function generatePuzzle() {
 		switch (direction) {
 			case "N":
 				puzzleMatrix[currentX][currentY].f = true;
+				puzzleMatrix[currentX][currentY - 1].m = true;
 				puzzleMatrix[currentX][currentY].x = false;
-				answerLines.push({sX: currentX, sY: currentY, eX: currentX, eY: currentY - 1});
 				currentY -= 1;
 				break;
 			case "E":
 				puzzleMatrix[currentX][currentY].f = true;
+				puzzleMatrix[currentX - 1][currentY].m = true;
 				puzzleMatrix[currentX][currentY].y = false;
-				answerLines.push({sX: currentX, sY: currentY, eX: currentX - 1, eY: currentY});
 				currentX -= 1;
 				break;
 			case "W":
 				puzzleMatrix[currentX][currentY].f = true;
+				puzzleMatrix[currentX + 1][currentY].m = true;
 				puzzleMatrix[currentX + 1][currentY].y = false;
-				answerLines.push({sX: currentX, sY: currentY, eX: currentX + 1, eY: currentY});
 				currentX += 1;
 				break;
 			case "S":
@@ -102,8 +103,8 @@ function generatePuzzle() {
 					break;
 				} else {
 					puzzleMatrix[currentX][currentY].f = true;
+					puzzleMatrix[currentX][currentY + 1].m = true;
 					puzzleMatrix[currentX][currentY + 1].x = false;
-					answerLines.push({sX: currentX, sY: currentY, eX: currentX, eY: currentY + 1});
 					currentY += 1;
 					break;
 				}
@@ -192,16 +193,20 @@ function generatePuzzle() {
 		}
 	}
 
-	canvasDisplay(puzzleMatrix, startingX, endingX, answerLines);
+	canvasDisplay(puzzleMatrix, startingX, endingX);
 }
 
-function canvasDisplay(puzzleMatrix, startingX, endingX, answerLines) {
+function canvasDisplay(puzzleMatrix, startingX, endingX) {
 	var c = document.getElementById("canvas");
 	var ctx = c.getContext("2d");
 	c.width = puzzleWidth * 50;
 	c.height = puzzleHeight * 50;
 	ctx.lineWidth = 5;
 	ctx.strokeStyle = "#000"; // Black Stroke Colour
+	//ctx.fillStyle = "#000"; // Black Fill Colour
+	ctx.fillStyle = "#044"; // My-Cyan Fill Colour
+	//ctx.fillStyle = "blue"; // Blue Fill Colour
+	//ctx.fillStyle = "rgb(255, 127, 126)"; // Pink Fill Colour
 	ctx.clearRect(0, 0, c.width, c.height);
 	for (var x = 0; x < puzzleMatrix.length; x++) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
@@ -228,59 +233,12 @@ function canvasDisplay(puzzleMatrix, startingX, endingX, answerLines) {
 	// Option To Save As Unanswered Image
 	var imagePng = c.toDataURL('image/png');
 	document.getElementById("imageDownload").href = imagePng.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
-	// Solution Marking System
-	ctx.strokeStyle = "#f00"; // Black Stroke Colour
-		// Starting X Line
-	ctx.beginPath();
-	ctx.moveTo(startingX * 50 + 25, 0);
-	ctx.lineTo(startingX * 50 + 25, 26.5);
-	ctx.stroke();
-	ctx.closePath();
-	ctx.beginPath();
-	ctx.moveTo(startingX * 50 + 12.5, 3.125);
-	ctx.lineTo(startingX * 50 + 25, 15.625);
-	ctx.lineTo(startingX * 50 + 37.5, 3.125);
-	ctx.stroke();
-	ctx.closePath();
-		// Ending X Line
-	ctx.beginPath();
-	ctx.moveTo(endingX * 50 + 25, c.height - 26.5);
-	ctx.lineTo(endingX * 50 + 25, c.height);
-	ctx.stroke();
-	ctx.closePath();
-	ctx.beginPath();
-	ctx.moveTo(endingX * 50 + 12.5, c.height - 26.5 + 6.25);
-	ctx.lineTo(endingX * 50 + 25, c.height - 6.25);
-	ctx.lineTo(endingX * 50 + 37.5, c.height - 26.5 + 6.25);
-	ctx.stroke();
-	ctx.closePath();
-	for (var i = 0; i < answerLines.length; i++) {
-		var answerLine = answerLines[i];
-		if (answerLine.sX == answerLine.eX) {
-			if (answerLine.sY < answerLine.eY) { // To South
+	// Individual-Box Marking System
+	for (var x = 0; x < puzzleMatrix.length; x++) {
+		for (var y = 0; y < puzzleMatrix[x].length; y++) {
+			if (puzzleMatrix[x][y].m == true) {
 				ctx.beginPath();
-				ctx.moveTo(answerLine.sX * 50 + 25, answerLine.sY * 50 + 23.5);
-				ctx.lineTo(answerLine.eX * 50 + 25, answerLine.eY * 50 + 26.5);
-				ctx.stroke();
-				ctx.closePath();
-			} else { // To North
-				ctx.beginPath();
-				ctx.moveTo(answerLine.sX * 50 + 25, answerLine.sY * 50 + 26.5);
-				ctx.lineTo(answerLine.eX * 50 + 25, answerLine.eY * 50 + 23.5);
-				ctx.stroke();
-				ctx.closePath();
-			}
-		} else {
-			if (answerLine.sX < answerLine.eX) { // To East
-				ctx.beginPath();
-				ctx.moveTo(answerLine.sX * 50 + 23.5, answerLine.sY * 50 + 25);
-				ctx.lineTo(answerLine.eX * 50 + 26.5, answerLine.eY * 50 + 25);
-				ctx.stroke();
-				ctx.closePath();
-			} else { // To West
-				ctx.beginPath();
-				ctx.moveTo(answerLine.sX * 50 + 26.5, answerLine.sY * 50 + 25);
-				ctx.lineTo(answerLine.eX * 50 + 23.5, answerLine.eY * 50 + 25);
+				ctx.fillRect(x * 50 + 15.625, y * 50 + 15.625, 18.75, 18.75);
 				ctx.stroke();
 				ctx.closePath();
 			}
