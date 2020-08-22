@@ -18,7 +18,7 @@ function generatePuzzle() {
 	}
 	for (var x = 0; x < puzzleMatrix.length; x++) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
-			puzzleMatrix[x][y] = {x: true, y: true, f: false, m: false};
+			puzzleMatrix[x][y] = {x: true, y: true, f: false, m: false, d: ""};
 		}
 	}
 	console.log(puzzleMatrix);
@@ -27,7 +27,6 @@ function generatePuzzle() {
 	var currentX = startingX, currentY = 0;
 	puzzleMatrix[currentX][currentY].f = true;
 	puzzleMatrix[currentX][currentY].m = true;
-	var answerTiles = [];
 	var atBottom = false;
 	while (!atBottom) {
 		// Get Directions
@@ -50,7 +49,7 @@ function generatePuzzle() {
 				partsNum = parseInt(partsNumValue);
 			}
 			for (var i = 0; i < partsNum; i++) {
-				directions.push("E");
+				directions.push("W");
 			}
 		}
 		if (currentX != puzzleWidth - 1 && puzzleMatrix[currentX + 1][currentY].f == false) {
@@ -60,7 +59,7 @@ function generatePuzzle() {
 				partsNum = parseInt(partsNumValue);
 			}
 			for (var i = 0; i < partsNum; i++) {
-				directions.push("W");
+				directions.push("E");
 			}
 		}
 		if (true) {
@@ -84,13 +83,13 @@ function generatePuzzle() {
 				puzzleMatrix[currentX][currentY].x = false;
 				currentY -= 1;
 				break;
-			case "E":
+			case "W":
 				puzzleMatrix[currentX][currentY].f = true;
 				puzzleMatrix[currentX - 1][currentY].m = true;
 				puzzleMatrix[currentX][currentY].y = false;
 				currentX -= 1;
 				break;
-			case "W":
+			case "E":
 				puzzleMatrix[currentX][currentY].f = true;
 				puzzleMatrix[currentX + 1][currentY].m = true;
 				puzzleMatrix[currentX + 1][currentY].y = false;
@@ -109,7 +108,9 @@ function generatePuzzle() {
 					break;
 				}
 		}
+		puzzleMatrix[currentX][currentY].d = direction;
 	}
+	// Fill In With Random Paths
 	var filledAll = false;
 	while (!filledAll) {
 		// Get All Unfilled Tiles
@@ -153,16 +154,16 @@ function generatePuzzle() {
 					directions.push("S");
 				}
 			}
-			if (unfilledItemTemp.x - 1 >= 0) { // East
+			if (unfilledItemTemp.x - 1 >= 0) { // West
 				if (puzzleMatrix[unfilledItemTemp.x - 1][unfilledItemTemp.y].f == true) {
 					unfilledItem = unfilledItemTemp;
-					directions.push("E");
+					directions.push("W");
 				}
 			}
-			if (unfilledItemTemp.x + 1 < puzzleWidth) { // West
+			if (unfilledItemTemp.x + 1 < puzzleWidth) { // East
 				if (puzzleMatrix[unfilledItemTemp.x + 1][unfilledItemTemp.y].f == true) {
 					unfilledItem = unfilledItemTemp;
-					directions.push("W");
+					directions.push("E");
 				}
 			}
 			if (unfilledItem != null) {
@@ -184,11 +185,11 @@ function generatePuzzle() {
 				break;
 			case "E":
 				puzzleMatrix[unfilledItem.x][unfilledItem.y].f = true;
-				puzzleMatrix[unfilledItem.x][unfilledItem.y].y = false;
+				puzzleMatrix[unfilledItem.x + 1][unfilledItem.y].y = false;
 				break;
 			case "W":
 				puzzleMatrix[unfilledItem.x][unfilledItem.y].f = true;
-				puzzleMatrix[unfilledItem.x + 1][unfilledItem.y].y = false;
+				puzzleMatrix[unfilledItem.x][unfilledItem.y].y = false;
 				break;
 		}
 	}
@@ -203,10 +204,7 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 	c.height = puzzleHeight * 50;
 	ctx.lineWidth = 5;
 	ctx.strokeStyle = "#000"; // Black Stroke Colour
-	//ctx.fillStyle = "#000"; // Black Fill Colour
-	ctx.fillStyle = "#044"; // My-Cyan Fill Colour
-	//ctx.fillStyle = "blue"; // Blue Fill Colour
-	//ctx.fillStyle = "rgb(255, 127, 126)"; // Pink Fill Colour
+	ctx.fillStyle = "#f00"; // Red Fill Colour
 	ctx.clearRect(0, 0, c.width, c.height);
 	for (var x = 0; x < puzzleMatrix.length; x++) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
@@ -267,6 +265,31 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 					if (touches < 2) {
 						console.warn("Touches: " + touches);
 						puzzleMatrix[x][y].m = false;
+						goAgain = true;
+					} else if (touches > 2) {
+						console.warn("Touches: " + touches);
+						switch (puzzleMatrix[x][y].d) {
+							case "S":
+								if (y - 1 >= 0) {
+									puzzleMatrix[x][y - 1].m = false;
+								}
+								break;
+							case "N":
+								if (y + 1 < puzzleHeight) {
+									puzzleMatrix[x][y + 1].m = false;
+								}
+								break;
+							case "W":
+								if (x + 1 < puzzleWidth) {
+									puzzleMatrix[x + 1][y].m = false;
+								}
+								break;
+							case "E":
+								if (x - 1 >= 0) {
+									puzzleMatrix[x - 1][y].m = false;
+								}
+								break;
+						}
 						goAgain = true;
 					}
 				}
