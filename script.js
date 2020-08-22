@@ -18,7 +18,7 @@ function generatePuzzle() {
 	}
 	for (var x = 0; x < puzzleMatrix.length; x++) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
-			puzzleMatrix[x][y] = {x: true, y: true, f: false, m: false, d: "", b: false};
+			puzzleMatrix[x][y] = {x: true, y: true, f: false, m: false};
 		}
 	}
 	console.log(puzzleMatrix);
@@ -114,7 +114,6 @@ function generatePuzzle() {
 					break;
 				}
 		}
-		puzzleMatrix[currentX][currentY].d = direction;
 	}
 	// Fill In With Random Paths
 	var filledAll = false;
@@ -271,36 +270,6 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 					if (touches < 2) {
 						console.warn("Touches: " + touches);
 						puzzleMatrix[x][y].m = false;
-						puzzleMatrix[x][y].b = true;
-						goAgain = true;
-					} else if (touches > 2) {
-						console.warn("Touches: " + touches);
-						switch (puzzleMatrix[x][y].d) {
-							case "S":
-								if (y - 1 >= 0) {
-									puzzleMatrix[x][y - 1].m = false;
-									puzzleMatrix[x][y - 1].b = true;
-								}
-								break;
-							case "N":
-								if (y + 1 < puzzleHeight) {
-									puzzleMatrix[x][y + 1].m = false;
-									puzzleMatrix[x][y + 1].b = true;
-								}
-								break;
-							case "W":
-								if (x + 1 < puzzleWidth) {
-									puzzleMatrix[x + 1][y].m = false;
-									puzzleMatrix[x + 1][y].b = true;
-								}
-								break;
-							case "E":
-								if (x - 1 >= 0) {
-									puzzleMatrix[x - 1][y].m = false;
-									puzzleMatrix[x - 1][y].b = true;
-								}
-								break;
-						}
 						goAgain = true;
 					}
 				}
@@ -311,18 +280,6 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 	for (var x = 0; x < puzzleMatrix.length; x++) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
 			if (puzzleMatrix[x][y].m == true) {
-				ctx.beginPath();
-				ctx.fillRect(x * 50 + 15.625, y * 50 + 15.625, 18.75, 18.75);
-				ctx.stroke();
-				ctx.closePath();
-			}
-		}
-	}
-		// Debugging
-	ctx.fillStyle = "#abc";
-	for (var x = 0; x < puzzleMatrix.length; x++) {
-		for (var y = 0; y < puzzleMatrix[x].length; y++) {
-			if (puzzleMatrix[x][y].b == true) {
 				ctx.beginPath();
 				ctx.fillRect(x * 50 + 15.625, y * 50 + 15.625, 18.75, 18.75);
 				ctx.stroke();
