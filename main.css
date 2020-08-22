@@ -57,7 +57,7 @@ button {
 canvas {
 	background-color: #fff;
 	align-self: center;
-	width: 75vw;
+	height: 75vh;
 }
 
 a {
