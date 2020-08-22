@@ -281,7 +281,7 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
 			if (puzzleMatrix[x][y].m == true) {
 				ctx.beginPath();
-				ctx.fillRect(x * 50 + 15.625, y * 50 + 15.625, 18.75, 18.75);
+				ctx.fillRect(x * 50 + 18.75, y * 50 + 18.75, 12.5, 12.5);
 				ctx.stroke();
 				ctx.closePath();
 			}
