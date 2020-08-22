@@ -31,7 +31,7 @@ function generatePuzzle() {
 	while (!atBottom) {
 		// Get Directions
 		var directions = [];
-		if (currentY != 0 && puzzleMatrix[currentX][currentY - 1].f == false) {
+		if (currentY != 0 && puzzleMatrix[currentX][currentY - 1].f == false) { // North
 			var partsNumValue = document.getElementById("nParts").value;
 			var partsNum = 1;
 			if (partsNumValue != "") {
@@ -42,7 +42,7 @@ function generatePuzzle() {
 				directions.push("N");
 			}
 		}
-		if (currentX != 0 && puzzleMatrix[currentX - 1][currentY].f == false) {
+		if (currentX != 0 && puzzleMatrix[currentX - 1][currentY].f == false) { // West
 			var partsNumValue = document.getElementById("eParts").value;
 			var partsNum = 2;
 			if (partsNumValue != "") {
@@ -52,7 +52,7 @@ function generatePuzzle() {
 				directions.push("W");
 			}
 		}
-		if (currentX != puzzleWidth - 1 && puzzleMatrix[currentX + 1][currentY].f == false) {
+		if (currentX != puzzleWidth - 1 && puzzleMatrix[currentX + 1][currentY].f == false) { // East
 			var partsNumValue = document.getElementById("wParts").value;
 			var partsNum = 2;
 			if (partsNumValue != "") {
@@ -62,7 +62,7 @@ function generatePuzzle() {
 				directions.push("E");
 			}
 		}
-		if (true) {
+		if (true) { // South
 			var partsNumValue = document.getElementById("sParts").value;
 			var partsNum = 1;
 			if (partsNumValue != "") {
