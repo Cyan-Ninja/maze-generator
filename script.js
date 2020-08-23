@@ -207,9 +207,8 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 	var ctx = c.getContext("2d");
 	c.width = puzzleWidth * 50;
 	c.height = puzzleHeight * 50;
-	ctx.lineWidth = 5;
-	ctx.strokeStyle = "#000"; // Black Stroke Colour
-	ctx.fillStyle = "#f00"; // Red Fill Colour
+	ctx.lineWidth = 5; // Wall Line Width
+	ctx.strokeStyle = "#000"; // Black Wall Stroke Colour
 	ctx.clearRect(0, 0, c.width, c.height);
 	for (var x = 0; x < puzzleMatrix.length; x++) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
@@ -247,10 +246,10 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 						if (puzzleMatrix[x][y - 1].m == true && puzzleMatrix[x][y].x == false) {
 							touches++;
 						}
-					} else if (y - 1 < 0 && x == startingX) { // Starting North Connection
+					} else if (y == 0 && x == startingX) { // Starting North Connection
 						touches++;
 					}
-					if (y + 1 < puzzleHeight) { // North Connection
+					if (y + 1 < puzzleHeight) { // South Connection
 						if (puzzleMatrix[x][y + 1].m == true && puzzleMatrix[x][y + 1].x == false) {
 							touches++;
 						}
@@ -276,19 +275,63 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 			}
 		}
 	} while (goAgain);
-	// Individual-Box Marking System
+	// Line Marking System
+	//ctx.lineWidth = 5; // Solution Line Width
+	ctx.strokeStyle = "#F00"; // Red Solution Stroke Colour
 	for (var x = 0; x < puzzleMatrix.length; x++) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
 			if (puzzleMatrix[x][y].m == true) {
-				ctx.beginPath();
-				ctx.fillRect(x * 50 + 18.75, y * 50 + 18.75, 12.5, 12.5);
-				ctx.stroke();
-				ctx.closePath();
+				if (y - 1 >= 0) { // North Connection
+					if (puzzleMatrix[x][y - 1].m == true && puzzleMatrix[x][y].x == false) {
+						ctx.beginPath();
+						ctx.moveTo(x * 50 + 25, y * 50 + 27.5);
+						ctx.lineTo(x * 50 + 25, (y - 1) * 50 + 22.5);
+						ctx.stroke();
+						ctx.closePath();
+					}
+				} else if (y == 0 && x == startingX) { // Starting North Connection
+					ctx.beginPath();
+					ctx.moveTo(x * 50 + 25, y * 50 + 27.5);
+					ctx.lineTo(x * 50 + 25, (y - 1) * 50 + 22.5);
+					ctx.stroke();
+					ctx.closePath();
+				}
+				if (y + 1 < puzzleHeight) { // South Connection
+					if (puzzleMatrix[x][y + 1].m == true && puzzleMatrix[x][y + 1].x == false) {
+						ctx.beginPath();
+						ctx.moveTo(x * 50 + 25, y * 50 + 22.5);
+						ctx.lineTo(x * 50 + 25, (y + 1) * 50 + 27.5);
+						ctx.stroke();
+						ctx.closePath();
+					}
+				} else if (y + 1 == puzzleHeight && x == endingX) { // Ending South Connection
+					ctx.beginPath();
+					ctx.moveTo(x * 50 + 25, y * 50 + 22.5);
+					ctx.lineTo(x * 50 + 25, (y + 1) * 50 + 27.5);
+					ctx.stroke();
+					ctx.closePath();
+				}
+				if (x - 1 >= 0) { // West Connection
+					if (puzzleMatrix[x - 1][y].m == true && puzzleMatrix[x][y].y == false) {
+						ctx.beginPath();
+						ctx.moveTo(x * 50 + 27.5, y * 50 + 25);
+						ctx.lineTo((x - 1) * 50 + 22.5, y * 50 + 25);
+						ctx.stroke();
+						ctx.closePath();
+					}
+				}
+				if (x + 1 < puzzleWidth) { // East Connection
+					if (puzzleMatrix[x + 1][y].m == true && puzzleMatrix[x + 1][y].y == false) {
+						ctx.beginPath();
+						ctx.moveTo(x * 50 + 22.5, y * 50 + 25);
+						ctx.lineTo((x + 1) * 50 + 27.5, y * 50 + 25);
+						ctx.stroke();
+						ctx.closePath();
+					}
+				}
 			}
 		}
 	}
-	// Line Marking System
-		// TODO AFTER
 	// Option To Save As Answered Image
 	var answeredImagePng = c.toDataURL('image/png');
 	document.getElementById("answeredImageDownload").href = answeredImagePng.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
