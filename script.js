@@ -18,7 +18,7 @@ function generatePuzzle() {
 	}
 	for (var x = 0; x < puzzleMatrix.length; x++) {
 		for (var y = 0; y < puzzleMatrix[x].length; y++) {
-			puzzleMatrix[x][y] = {x: true, y: true, f: false, m: false};
+			puzzleMatrix[x][y] = {x: true, y: true, f: false, m: false, d: ""};
 		}
 	}
 	console.log(puzzleMatrix);
@@ -114,6 +114,7 @@ function generatePuzzle() {
 					break;
 				}
 		}
+		puzzleMatrix[currentX][currentY].d = direction;
 	}
 	// Fill In With Random Paths
 	var filledAll = false;
@@ -269,6 +270,31 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 					if (touches < 2) {
 						console.warn("Touches: " + touches);
 						puzzleMatrix[x][y].m = false;
+						goAgain = true;
+					} else if (touches > 2) {
+						console.warn("Touches: " + touches);
+						switch (puzzleMatrix[x][y].d) {
+							case "S":
+								if (y - 1 >= 0) {
+									puzzleMatrix[x][y - 1].m = false;
+								}
+								break;
+							case "N":
+								if (y + 1 < puzzleHeight) {
+									puzzleMatrix[x][y + 1].m = false;
+								}
+								break;
+							case "W":
+								if (x + 1 < puzzleWidth) {
+									puzzleMatrix[x + 1][y].m = false;
+								}
+								break;
+							case "E":
+								if (x - 1 >= 0) {
+									puzzleMatrix[x - 1][y].m = false;
+								}
+								break;
+						}
 						goAgain = true;
 					}
 				}
