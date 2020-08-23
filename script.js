@@ -201,6 +201,20 @@ function generatePuzzle() {
 	}
 
 	canvasDisplay(puzzleMatrix, startingX, endingX);
+
+	// Recurse If All Marks Are Accidentally Destroyed
+	var hasMarks = false;
+	for (var x = 0; x < puzzleMatrix.length; x++) {
+		for (var y = 0; y < puzzleMatrix[x].length; y++) {
+			if (puzzleMatrix[x][y].m == true) {
+				hasMarks = true;
+			}
+		}
+	}
+	if (!hasMarks) {
+		console.error("No Marks Found! Recursing.");
+		generatePuzzle();
+	}
 }
 
 function canvasDisplay(puzzleMatrix, startingX, endingX) {
