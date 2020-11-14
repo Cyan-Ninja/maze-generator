@@ -5,25 +5,16 @@ var result = {"puzzleMatrix": [], "startingX": 0, "endingX": 0};
 function generatePuzzle() {
 	let puzzleWidthValue = document.getElementById("puzzleWidth").value, puzzleHeightValue = document.getElementById("puzzleHeight").value;
 	if (puzzleWidthValue != "") {
-		puzzleWidth = parseInt(puzzleWidthValue);
-		if (puzzleWidth > 50) {
-			puzzleWidth = 50;
-		} else if (puzzleWidth < 2) {
-			puzzleWidth = 2;
-		}
+		puzzleWidth = Math.max(2, Math.min(50, parseInt(puzzleWidthValue)));
 	} else {
 		puzzleWidth = 20;
 	}
 	if (puzzleHeightValue != "") {
-		puzzleHeight = parseInt(puzzleHeightValue);
-		if (puzzleHeight > 50) {
-			puzzleHeight = 50;
-		} else if (puzzleHeight < 2) {
-			puzzleHeight = 2;
-		}
+		puzzleHeight = Math.max(2, Math.min(50, parseInt(puzzleWidthValue)));
 	} else {
 		puzzleHeight = 20;
 	}
+	console.info("Width:", puzzleWidth, "Height:", puzzleHeight);
 	var puzzleMatrix = new Array(puzzleWidth);
 	for (var i = 0; i < puzzleMatrix.length; i++) {
 		puzzleMatrix[i] = new Array(puzzleHeight);
@@ -33,9 +24,9 @@ function generatePuzzle() {
 			puzzleMatrix[x][y] = {x: true, y: true, f: false, m: false, d: ""};
 		}
 	}
-	console.log(puzzleMatrix);
+	console.info("Starting Matrix:", puzzleMatrix);
 	var startingX = Math.floor(Math.random() * puzzleWidth), endingX;
-	console.log("StartingX: " + startingX);
+	console.info("Starting X:", startingX);
 	var currentX = startingX, currentY = 0;
 	puzzleMatrix[currentX][currentY].f = true;
 	puzzleMatrix[currentX][currentY].m = true;
@@ -92,7 +83,7 @@ function generatePuzzle() {
 		}
 		// Get Direction
 		var direction = directions[Math.floor(Math.random() * directions.length)];
-		console.log("Dir: " + direction + "  Dirs: " + directions);
+		console.log("Direction:", direction, "Directions:", directions);
 		// Actually Do In That Direction
 		switch (direction) {
 			case "N":
@@ -143,7 +134,7 @@ function generatePuzzle() {
 		if (unfilledItemsPuzzleMatrix.length == 1) {
 			filledAll = true;
 		}
-		console.log(unfilledItemsPuzzleMatrix);
+		console.log("Unfilled Items:", unfilledItemsPuzzleMatrix);
 		function shuffle(a) {
 			var j, x, i;
 			for (i = a.length - 1; i > 0; i--) {
@@ -188,10 +179,10 @@ function generatePuzzle() {
 				break;
 			}
 		}
-		console.log(unfilledItem);
+		console.log("Unfilled Item:", unfilledItem);
 		// Choose Direction
 		var direction = directions[Math.floor(Math.random() * directions.length)];
-		console.log("Dir: " + direction + "  Dirs: " + directions);
+		console.log("(U) Direction:", direction, "(U) Directions: ", directions);
 		switch (direction) {
 			case "N":
 				puzzleMatrix[unfilledItem.x][unfilledItem.y].f = true;
