@@ -1,14 +1,26 @@
 var puzzleWidth = 20;
 var puzzleHeight = 20;
+var solutionVisible = false;
+var result = {"puzzleMatrix": [], "startingX": 0, "endingX": 0};
 function generatePuzzle() {
 	let puzzleWidthValue = document.getElementById("puzzleWidth").value, puzzleHeightValue = document.getElementById("puzzleHeight").value;
 	if (puzzleWidthValue != "") {
 		puzzleWidth = parseInt(puzzleWidthValue);
+		if (puzzleWidth > 50) {
+			puzzleWidth = 50;
+		} else if (puzzleWidth < 2) {
+			puzzleWidth = 2;
+		}
 	} else {
 		puzzleWidth = 20;
 	}
 	if (puzzleHeightValue != "") {
 		puzzleHeight = parseInt(puzzleHeightValue);
+		if (puzzleHeight > 50) {
+			puzzleHeight = 50;
+		} else if (puzzleHeight < 2) {
+			puzzleHeight = 2;
+		}
 	} else {
 		puzzleHeight = 20;
 	}
@@ -200,7 +212,8 @@ function generatePuzzle() {
 		}
 	}
 
-	canvasDisplay(puzzleMatrix, startingX, endingX);
+	result = {"puzzleMatrix": puzzleMatrix, "startingX": startingX, "endingX": endingX}
+	canvasDisplay();
 
 	// Recurse If All Marks Are Accidentally Destroyed
 	var hasMarks = false;
@@ -216,8 +229,17 @@ function generatePuzzle() {
 		generatePuzzle();
 	}
 }
-
-function canvasDisplay(puzzleMatrix, startingX, endingX) {
+function solutionVisibleToggle() {
+	solutionVisible = !solutionVisible;
+	if (solutionVisible) {
+		document.getElementById("solutionVisibleToggleButton").innerHTML = "Hide Solution";
+	} else {
+		document.getElementById("solutionVisibleToggleButton").innerHTML = "Show Solution";
+	}
+	canvasDisplay();
+}
+function canvasDisplay() {
+	var puzzleMatrix = result.puzzleMatrix, startingX = result.startingX, endingX = result.endingX;
 	var c = document.getElementById("canvas");
 	var ctx = c.getContext("2d");
 	c.width = puzzleWidth * 50;
@@ -317,56 +339,58 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 	} while (goAgain);
 	// Line Marking System
 	//ctx.lineWidth = 5; // Solution Line Width
-	ctx.strokeStyle = "#F00"; // Red Solution Stroke Colour
-	for (var x = 0; x < puzzleMatrix.length; x++) {
-		for (var y = 0; y < puzzleMatrix[x].length; y++) {
-			if (puzzleMatrix[x][y].m == true) {
-				if (y - 1 >= 0) { // North Connection
-					if (puzzleMatrix[x][y - 1].m == true && puzzleMatrix[x][y].x == false) {
+	if (solutionVisible) {
+		ctx.strokeStyle = "#F00"; // Red Solution Stroke Colour
+		for (var x = 0; x < puzzleMatrix.length; x++) {
+			for (var y = 0; y < puzzleMatrix[x].length; y++) {
+				if (puzzleMatrix[x][y].m == true) {
+					if (y - 1 >= 0) { // North Connection
+						if (puzzleMatrix[x][y - 1].m == true && puzzleMatrix[x][y].x == false) {
+							ctx.beginPath();
+							ctx.moveTo(x * 50 + 25, y * 50 + 27.5);
+							ctx.lineTo(x * 50 + 25, (y - 1) * 50 + 22.5);
+							ctx.stroke();
+							ctx.closePath();
+						}
+					} else if (y == 0 && x == startingX) { // Starting North Connection
 						ctx.beginPath();
 						ctx.moveTo(x * 50 + 25, y * 50 + 27.5);
 						ctx.lineTo(x * 50 + 25, (y - 1) * 50 + 22.5);
 						ctx.stroke();
 						ctx.closePath();
 					}
-				} else if (y == 0 && x == startingX) { // Starting North Connection
-					ctx.beginPath();
-					ctx.moveTo(x * 50 + 25, y * 50 + 27.5);
-					ctx.lineTo(x * 50 + 25, (y - 1) * 50 + 22.5);
-					ctx.stroke();
-					ctx.closePath();
-				}
-				if (y + 1 < puzzleHeight) { // South Connection
-					if (puzzleMatrix[x][y + 1].m == true && puzzleMatrix[x][y + 1].x == false) {
+					if (y + 1 < puzzleHeight) { // South Connection
+						if (puzzleMatrix[x][y + 1].m == true && puzzleMatrix[x][y + 1].x == false) {
+							ctx.beginPath();
+							ctx.moveTo(x * 50 + 25, y * 50 + 22.5);
+							ctx.lineTo(x * 50 + 25, (y + 1) * 50 + 27.5);
+							ctx.stroke();
+							ctx.closePath();
+						}
+					} else if (y + 1 == puzzleHeight && x == endingX) { // Ending South Connection
 						ctx.beginPath();
 						ctx.moveTo(x * 50 + 25, y * 50 + 22.5);
 						ctx.lineTo(x * 50 + 25, (y + 1) * 50 + 27.5);
 						ctx.stroke();
 						ctx.closePath();
 					}
-				} else if (y + 1 == puzzleHeight && x == endingX) { // Ending South Connection
-					ctx.beginPath();
-					ctx.moveTo(x * 50 + 25, y * 50 + 22.5);
-					ctx.lineTo(x * 50 + 25, (y + 1) * 50 + 27.5);
-					ctx.stroke();
-					ctx.closePath();
-				}
-				if (x - 1 >= 0) { // West Connection
-					if (puzzleMatrix[x - 1][y].m == true && puzzleMatrix[x][y].y == false) {
-						ctx.beginPath();
-						ctx.moveTo(x * 50 + 27.5, y * 50 + 25);
-						ctx.lineTo((x - 1) * 50 + 22.5, y * 50 + 25);
-						ctx.stroke();
-						ctx.closePath();
+					if (x - 1 >= 0) { // West Connection
+						if (puzzleMatrix[x - 1][y].m == true && puzzleMatrix[x][y].y == false) {
+							ctx.beginPath();
+							ctx.moveTo(x * 50 + 27.5, y * 50 + 25);
+							ctx.lineTo((x - 1) * 50 + 22.5, y * 50 + 25);
+							ctx.stroke();
+							ctx.closePath();
+						}
 					}
-				}
-				if (x + 1 < puzzleWidth) { // East Connection
-					if (puzzleMatrix[x + 1][y].m == true && puzzleMatrix[x + 1][y].y == false) {
-						ctx.beginPath();
-						ctx.moveTo(x * 50 + 22.5, y * 50 + 25);
-						ctx.lineTo((x + 1) * 50 + 27.5, y * 50 + 25);
-						ctx.stroke();
-						ctx.closePath();
+					if (x + 1 < puzzleWidth) { // East Connection
+						if (puzzleMatrix[x + 1][y].m == true && puzzleMatrix[x + 1][y].y == false) {
+							ctx.beginPath();
+							ctx.moveTo(x * 50 + 22.5, y * 50 + 25);
+							ctx.lineTo((x + 1) * 50 + 27.5, y * 50 + 25);
+							ctx.stroke();
+							ctx.closePath();
+						}
 					}
 				}
 			}
