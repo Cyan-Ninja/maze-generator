@@ -10,7 +10,7 @@ function generatePuzzle() {
 		puzzleWidth = 20;
 	}
 	if (puzzleHeightValue != "") {
-		puzzleHeight = Math.max(2, Math.min(50, parseInt(puzzleWidthValue)));
+		puzzleHeight = Math.max(2, Math.min(50, parseInt(puzzleHeightValue)));
 	} else {
 		puzzleHeight = 20;
 	}
