@@ -1,115 +1,20 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html" charset="utf-8">
-		<title>Maze Generator</title>
-		<meta name=viewport content="width=device-width, initial-scale=1">
-		<style media="screen">
-* {
-	margin: 0.5vh;
-	padding: 0;
-	box-sizing: border-box;
-	background-color: #eee;
-	color: #111;
-	font-size: 1em;
-	font-family: Arial, sans-serif;
-	text-align: center;
-}
-
-#title {
-	font-size: 1.5em;
-	text-align: center;
-}
-
-#options {
-	width: 100vw;
-	margin: -1vw;
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: stretch;
-}
-
-#options div {
-	margin: 1vw;
-}
-
-#options div button {
-	margin: 0.5vw;
-}
-
-h1 {
-	font-weight: bold;
-	text-decoration: underline;
-}
-
-h2 {
-	margin: 0;
-	font-weight: normal;
-	text-decoration: underline;
-}
-
-input {
-	border: solid 0.25vw #ccc;
-	background-color: #ddd;
-}
-
-button {
-	border: solid 0.25vw #ccc;
-	background-color: #ddd;
-}
-
-canvas {
-	background-color: #fff;
-	align-self: center;
-	height: 75vh;
-}
-
-a {
-	text-decoration: none;
-}
-
-a:hover {
-	text-decoration: underline overline;
-}
-
-a:focus {
-	text-decoration: underline overline;
-}
-
-a:active {
-	text-decoration: underline overline;
-}
-		</style>
-	</head>
-	<body>
-		<h1 id="title">Maze Generator</h1>
-			<input type="text" id="puzzleWidth" style="width:45vw;" placeholder="Width [Def: 20]">
-			<input type="text" id="puzzleHeight" style="width:45vw;" placeholder="Height [Def: 20]"><br>
-			<input type="text" id="nParts" style="width:22.5vw;" placeholder="North Parts [Def: 1]">
-			<input type="text" id="eParts" style="width:22.5vw;" placeholder="East Parts [Def: 2]">
-			<input type="text" id="wParts" style="width:22.5vw;" placeholder="West Parts [Def: 2]">
-			<input type="text" id="sParts" style="width:22.5vw;" placeholder="South Parts [Def: 1]"><br>
-			<button type="button" id="generatePuzzle" style="width:90vw;" onclick="generatePuzzle();">Generate Maze</button><br>
-		<canvas id="canvas">Your browser doesn't support the canvas tag, please update to a newer browser.</canvas><br>
-		<a href="" download="Puzzle.png" class="download" id="imageDownload">[Download Image]</a>
-		<a href="" download="AnsweredPuzzle.png" class="download" id="answeredImageDownload">[Download Answered Image]</a><br>
-		<pre id="textDisplay"></pre>
-<script type="text/javascript">
 var puzzleWidth = 20;
 var puzzleHeight = 20;
+var solutionVisible = false;
+var result = {"puzzleMatrix": [], "startingX": 0, "endingX": 0};
 function generatePuzzle() {
 	let puzzleWidthValue = document.getElementById("puzzleWidth").value, puzzleHeightValue = document.getElementById("puzzleHeight").value;
 	if (puzzleWidthValue != "") {
-		puzzleWidth = parseInt(puzzleWidthValue);
+		puzzleWidth = Math.max(2, Math.min(50, parseInt(puzzleWidthValue)));
 	} else {
 		puzzleWidth = 20;
 	}
 	if (puzzleHeightValue != "") {
-		puzzleHeight = parseInt(puzzleHeightValue);
+		puzzleHeight = Math.max(2, Math.min(50, parseInt(puzzleHeightValue)));
 	} else {
 		puzzleHeight = 20;
 	}
+	console.info("Width:", puzzleWidth, "Height:", puzzleHeight);
 	var puzzleMatrix = new Array(puzzleWidth);
 	for (var i = 0; i < puzzleMatrix.length; i++) {
 		puzzleMatrix[i] = new Array(puzzleHeight);
@@ -119,9 +24,9 @@ function generatePuzzle() {
 			puzzleMatrix[x][y] = {x: true, y: true, f: false, m: false, d: ""};
 		}
 	}
-	console.log(puzzleMatrix);
+	console.info("Starting Matrix:", puzzleMatrix);
 	var startingX = Math.floor(Math.random() * puzzleWidth), endingX;
-	console.log("StartingX: " + startingX);
+	console.info("Starting X:", startingX);
 	var currentX = startingX, currentY = 0;
 	puzzleMatrix[currentX][currentY].f = true;
 	puzzleMatrix[currentX][currentY].m = true;
@@ -178,7 +83,7 @@ function generatePuzzle() {
 		}
 		// Get Direction
 		var direction = directions[Math.floor(Math.random() * directions.length)];
-		console.log("Dir: " + direction + "  Dirs: " + directions);
+		console.log("Direction:", direction, "Directions:", directions);
 		// Actually Do In That Direction
 		switch (direction) {
 			case "N":
@@ -229,7 +134,7 @@ function generatePuzzle() {
 		if (unfilledItemsPuzzleMatrix.length == 1) {
 			filledAll = true;
 		}
-		console.log(unfilledItemsPuzzleMatrix);
+		console.log("Unfilled Items:", unfilledItemsPuzzleMatrix);
 		function shuffle(a) {
 			var j, x, i;
 			for (i = a.length - 1; i > 0; i--) {
@@ -274,10 +179,10 @@ function generatePuzzle() {
 				break;
 			}
 		}
-		console.log(unfilledItem);
+		console.log("Unfilled Item:", unfilledItem);
 		// Choose Direction
 		var direction = directions[Math.floor(Math.random() * directions.length)];
-		console.log("Dir: " + direction + "  Dirs: " + directions);
+		console.log("(U) Direction:", direction, "(U) Directions: ", directions);
 		switch (direction) {
 			case "N":
 				puzzleMatrix[unfilledItem.x][unfilledItem.y].f = true;
@@ -298,7 +203,8 @@ function generatePuzzle() {
 		}
 	}
 
-	canvasDisplay(puzzleMatrix, startingX, endingX);
+	result = {"puzzleMatrix": puzzleMatrix, "startingX": startingX, "endingX": endingX}
+	canvasDisplay();
 
 	// Recurse If All Marks Are Accidentally Destroyed
 	var hasMarks = false;
@@ -314,8 +220,17 @@ function generatePuzzle() {
 		generatePuzzle();
 	}
 }
-
-function canvasDisplay(puzzleMatrix, startingX, endingX) {
+function solutionVisibleToggle() {
+	solutionVisible = !solutionVisible;
+	if (solutionVisible) {
+		document.getElementById("solutionVisibleToggleButton").innerHTML = "Hide Solution";
+	} else {
+		document.getElementById("solutionVisibleToggleButton").innerHTML = "Show Solution";
+	}
+	canvasDisplay();
+}
+function canvasDisplay() {
+	var puzzleMatrix = result.puzzleMatrix, startingX = result.startingX, endingX = result.endingX;
 	var c = document.getElementById("canvas");
 	var ctx = c.getContext("2d");
 	c.width = puzzleWidth * 50;
@@ -415,56 +330,58 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 	} while (goAgain);
 	// Line Marking System
 	//ctx.lineWidth = 5; // Solution Line Width
-	ctx.strokeStyle = "#F00"; // Red Solution Stroke Colour
-	for (var x = 0; x < puzzleMatrix.length; x++) {
-		for (var y = 0; y < puzzleMatrix[x].length; y++) {
-			if (puzzleMatrix[x][y].m == true) {
-				if (y - 1 >= 0) { // North Connection
-					if (puzzleMatrix[x][y - 1].m == true && puzzleMatrix[x][y].x == false) {
+	if (solutionVisible) {
+		ctx.strokeStyle = "#F00"; // Red Solution Stroke Colour
+		for (var x = 0; x < puzzleMatrix.length; x++) {
+			for (var y = 0; y < puzzleMatrix[x].length; y++) {
+				if (puzzleMatrix[x][y].m == true) {
+					if (y - 1 >= 0) { // North Connection
+						if (puzzleMatrix[x][y - 1].m == true && puzzleMatrix[x][y].x == false) {
+							ctx.beginPath();
+							ctx.moveTo(x * 50 + 25, y * 50 + 27.5);
+							ctx.lineTo(x * 50 + 25, (y - 1) * 50 + 22.5);
+							ctx.stroke();
+							ctx.closePath();
+						}
+					} else if (y == 0 && x == startingX) { // Starting North Connection
 						ctx.beginPath();
 						ctx.moveTo(x * 50 + 25, y * 50 + 27.5);
 						ctx.lineTo(x * 50 + 25, (y - 1) * 50 + 22.5);
 						ctx.stroke();
 						ctx.closePath();
 					}
-				} else if (y == 0 && x == startingX) { // Starting North Connection
-					ctx.beginPath();
-					ctx.moveTo(x * 50 + 25, y * 50 + 27.5);
-					ctx.lineTo(x * 50 + 25, (y - 1) * 50 + 22.5);
-					ctx.stroke();
-					ctx.closePath();
-				}
-				if (y + 1 < puzzleHeight) { // South Connection
-					if (puzzleMatrix[x][y + 1].m == true && puzzleMatrix[x][y + 1].x == false) {
+					if (y + 1 < puzzleHeight) { // South Connection
+						if (puzzleMatrix[x][y + 1].m == true && puzzleMatrix[x][y + 1].x == false) {
+							ctx.beginPath();
+							ctx.moveTo(x * 50 + 25, y * 50 + 22.5);
+							ctx.lineTo(x * 50 + 25, (y + 1) * 50 + 27.5);
+							ctx.stroke();
+							ctx.closePath();
+						}
+					} else if (y + 1 == puzzleHeight && x == endingX) { // Ending South Connection
 						ctx.beginPath();
 						ctx.moveTo(x * 50 + 25, y * 50 + 22.5);
 						ctx.lineTo(x * 50 + 25, (y + 1) * 50 + 27.5);
 						ctx.stroke();
 						ctx.closePath();
 					}
-				} else if (y + 1 == puzzleHeight && x == endingX) { // Ending South Connection
-					ctx.beginPath();
-					ctx.moveTo(x * 50 + 25, y * 50 + 22.5);
-					ctx.lineTo(x * 50 + 25, (y + 1) * 50 + 27.5);
-					ctx.stroke();
-					ctx.closePath();
-				}
-				if (x - 1 >= 0) { // West Connection
-					if (puzzleMatrix[x - 1][y].m == true && puzzleMatrix[x][y].y == false) {
-						ctx.beginPath();
-						ctx.moveTo(x * 50 + 27.5, y * 50 + 25);
-						ctx.lineTo((x - 1) * 50 + 22.5, y * 50 + 25);
-						ctx.stroke();
-						ctx.closePath();
+					if (x - 1 >= 0) { // West Connection
+						if (puzzleMatrix[x - 1][y].m == true && puzzleMatrix[x][y].y == false) {
+							ctx.beginPath();
+							ctx.moveTo(x * 50 + 27.5, y * 50 + 25);
+							ctx.lineTo((x - 1) * 50 + 22.5, y * 50 + 25);
+							ctx.stroke();
+							ctx.closePath();
+						}
 					}
-				}
-				if (x + 1 < puzzleWidth) { // East Connection
-					if (puzzleMatrix[x + 1][y].m == true && puzzleMatrix[x + 1][y].y == false) {
-						ctx.beginPath();
-						ctx.moveTo(x * 50 + 22.5, y * 50 + 25);
-						ctx.lineTo((x + 1) * 50 + 27.5, y * 50 + 25);
-						ctx.stroke();
-						ctx.closePath();
+					if (x + 1 < puzzleWidth) { // East Connection
+						if (puzzleMatrix[x + 1][y].m == true && puzzleMatrix[x + 1][y].y == false) {
+							ctx.beginPath();
+							ctx.moveTo(x * 50 + 22.5, y * 50 + 25);
+							ctx.lineTo((x + 1) * 50 + 27.5, y * 50 + 25);
+							ctx.stroke();
+							ctx.closePath();
+						}
 					}
 				}
 			}
@@ -474,6 +391,3 @@ function canvasDisplay(puzzleMatrix, startingX, endingX) {
 	var answeredImagePng = c.toDataURL('image/png');
 	document.getElementById("answeredImageDownload").href = answeredImagePng.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
 }
-</script>
-	</body>
-</html>

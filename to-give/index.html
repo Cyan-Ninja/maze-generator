@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html" charset="utf-8">
+		<title>Maze Generator</title>
+		<meta name=viewport content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="main.css">
+	</head>
+	<body>
+		<h1 id="title">Maze Generator</h1>
+			<input type="text" id="puzzleWidth" style="width:45vw;" placeholder="Width [Def: 20]">
+			<input type="text" id="puzzleHeight" style="width:45vw;" placeholder="Height [Def: 20]"><br>
+			<input type="text" id="nParts" style="width:22.5vw;" placeholder="North Parts [Def: 1]">
+			<input type="text" id="eParts" style="width:22.5vw;" placeholder="East Parts [Def: 2]">
+			<input type="text" id="wParts" style="width:22.5vw;" placeholder="West Parts [Def: 2]">
+			<input type="text" id="sParts" style="width:22.5vw;" placeholder="South Parts [Def: 1]"><br>
+			<button type="button" id="generatePuzzle" style="width:90vw;" onclick="generatePuzzle();">Generate Maze</button><br>
+		<canvas id="canvas">Your browser doesn't support the canvas tag, please update to a newer browser.</canvas><br>
+		<button id="solutionVisibleToggleButton" type="button" name="button" onclick="solutionVisibleToggle();">Show Solution</button>
+		<a href="" download="Puzzle.png" class="download" id="imageDownload">[Download Image]</a>
+		<a href="" download="SolvedPuzzle.png" class="download" id="answeredImageDownload">[Download Solved Image]</a><br>
+		<pre id="textDisplay"></pre>
+<script src="script.js" charset="utf-8" type="text/javascript"></script>
+	</body>
+</html>
